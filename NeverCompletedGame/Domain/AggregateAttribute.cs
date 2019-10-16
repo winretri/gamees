@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Domain
+namespace Playing
 {
     public class AggregateAttribute : Attribute
     {

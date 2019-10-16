@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
-using Domain;
+using Playing;
 
 namespace Infrastructure
 {

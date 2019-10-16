@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29409.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeverCompletedGame", "NeverCompletedGame\NeverCompletedGame.csproj", "{F6EBB53B-ADDC-458E-A1D1-D58CC5CFCB32}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{427B89C4-3ED6-4546-BED7-CA1006701806}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Playing", "Domain\Playing.csproj", "{427B89C4-3ED6-4546-BED7-CA1006701806}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{65773F65-CBC1-4A3F-B1E9-7666186EE28B}"
 EndProject
