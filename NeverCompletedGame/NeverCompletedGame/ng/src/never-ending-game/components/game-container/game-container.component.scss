@@ -1,0 +1,17 @@
+@import "../../style/variables";
+
+.game-container {
+  position: absolute;
+  width: calc(100% - #{$menu-width}px);
+  height: 100%;
+  top:0;
+}
+
+.game-menu {
+  position: absolute;
+  right: 0;
+  top:0;
+  height: 100%;
+  width: #{$menu-width}px;
+  overflow: hidden;
+}

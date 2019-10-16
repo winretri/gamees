@@ -9,6 +9,9 @@ namespace NeverCompletedGame.Commands
         public string Name { get; set; }
 
         [Required]
+        public string Domain { get; set; }
+
+        [Required]
         public string AggregateType { get; set; }
 
         [Required]

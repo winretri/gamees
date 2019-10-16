@@ -1,0 +1,35 @@
+@import "../../variables";
+
+.ncg-game-container {
+  .header {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    box-sizing: border-box;
+    padding: 30px;
+    color: white;
+    background: #10afff;
+    background-image: url('/assets/gfx/bgBotPoly.svg');
+    background-size: cover;
+    background-position: right bottom;
+
+    h1 {
+      font-size: 20px;
+      position: absolute;
+      top: 30px;
+      left: 20px;
+      width: 50%;
+      box-sizing: border-box;
+    }
+  }
+
+  main {
+    position: absolute;
+    top: #{$top-content}px;
+    height: calc(100% - #{$top-content}px);
+    width: 100%;
+  }
+
+}

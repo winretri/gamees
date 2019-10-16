@@ -1,16 +1,22 @@
 {
     "extends": "../tslint.json",
     "rules": {
+        "component-class-suffix": [
+          true,
+          "Component",
+          "Page",
+          "Shell"
+        ],
         "directive-selector": [
             true,
             "attribute",
-            "app",
+            "ncg",
             "camelCase"
         ],
         "component-selector": [
             true,
             "element",
-            "app",
+            "ncg",
             "kebab-case"
         ]
     }

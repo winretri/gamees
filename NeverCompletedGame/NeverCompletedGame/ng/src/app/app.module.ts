@@ -26,11 +26,7 @@ import { RxNeverCompletedGameService } from 'src/never-ending-game/service/rx.ne
     HttpClientModule,
     FormsModule,
     NeverEndingGameModule,
-    RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent },
-    ])
+    AppRoutingModule,
   ],
   providers: [
     RxNeverCompletedGameService,
