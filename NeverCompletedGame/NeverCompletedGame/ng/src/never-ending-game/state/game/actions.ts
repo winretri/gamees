@@ -6,6 +6,7 @@ export enum GameActionTypes {
   INIT_GAME = '[GAME] Init Game',
   OPEN_GAME = '[GAME] Open Game',
   OPEN_GAME_SUCCESS = '[GAME] Open Game Success',
+  OPEN_GAME_FAIL = '[GAME] Open Game Fail',
   LOAD_GAME = '[GAME] Load Game',
   LOAD_GAME_SUCCESS = '[GAME] Load Game Success',
   LOAD_GAME_FAIL = '[GAME] Load Game Fail',
@@ -28,6 +29,13 @@ export class OpenGame implements Action {
 
 export class OpenGameSuccess implements Action {
   readonly type = GameActionTypes.OPEN_GAME_SUCCESS;
+
+  constructor(public payload: GameId) {
+  }
+}
+
+export class OpenGameFail implements Action {
+  readonly type = GameActionTypes.OPEN_GAME_FAIL;
 
   constructor(public payload: GameId) {
   }
