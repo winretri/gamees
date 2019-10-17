@@ -3,8 +3,9 @@ import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Url } from '../util/url';
 import { NCG_BASE_URL } from '../util/token';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import * as uuid from 'uuid';
+import { catchError, map } from 'rxjs/operators';
 
 @Injectable()
 export class RxNeverCompletedGameService {
@@ -39,6 +40,6 @@ export class RxNeverCompletedGameService {
     const aggregateType = 'game';
     const aggregateId = uuid.v4();
     const body = { name, domain, aggregateType, aggregateId};
-    return this.http.post(this.url.serialize(), body).pipe(aggregateId);
+    return this.http.post(this.url.serialize(), body).pipe(map(() => aggregateId));
   }
 }

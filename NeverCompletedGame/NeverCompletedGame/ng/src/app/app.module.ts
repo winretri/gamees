@@ -15,6 +15,12 @@ import { NCG_BASE_URL } from 'src/never-ending-game/util/token';
 import { RxNeverCompletedGameService } from 'src/never-ending-game/service/rx.never-completed-game.service';
 import { GamePageModule } from './game/pages/game-page/game.page.module';
 import { StoreModule } from '@ngrx/store';
+import { GameEffects } from 'src/never-ending-game/state';
+import { EffectsModule } from '@ngrx/effects';
+
+const effects = [
+  GameEffects,
+];
 
 @NgModule({
   declarations: [
@@ -31,6 +37,7 @@ import { StoreModule } from '@ngrx/store';
     NeverEndingGameModule,
     GamePageModule,
     AppRoutingModule,
+    EffectsModule.forRoot(effects),
     StoreModule.forRoot(GameReducers),
   ],
   providers: [

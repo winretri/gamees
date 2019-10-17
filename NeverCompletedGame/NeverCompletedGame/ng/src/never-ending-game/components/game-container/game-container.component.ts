@@ -17,6 +17,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   constructor(private store: Store<any>) { }
 
   ngOnInit() {
+    console.log('game container');
     this.store.dispatch(new gameAction.InitGame());
   }
 

@@ -44,6 +44,7 @@ export class GameEffects {
       gameAction.GameActionTypes.INIT_GAME
     ),
     concatMap((action: gameAction.InitGame) => {
+      console.log('init action: '+this.localStorage.containsOpenGameId);
      if (this.localStorage.containsOpenGameId) {
        return of(new gameAction.LoadGame(this.localStorage.getOpenGameId()));
      } else {
