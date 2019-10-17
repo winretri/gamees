@@ -8,7 +8,7 @@ import * as gameAction from '../../state/';
 @Component({
   selector: 'ncg-game-container',
   templateUrl: './game-container.component.html',
-  styleUrls: ['./game-container.component.css']
+  styleUrls: ['./game-container.component.scss']
 })
 export class GameContainerComponent implements OnInit, OnDestroy {
 

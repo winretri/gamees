@@ -1,6 +1,6 @@
 import { GameAction, gameReducer, GameState } from './game';
 
-export interface GameState {
+export interface NgcGameState {
   game: GameState;
 }
 
