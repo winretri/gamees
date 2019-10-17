@@ -42,7 +42,7 @@ export const  reducers = [
   initGameReducer,
 ];
 
-export function flowReducer(
+export function gameReducer(
   state: GameState = initialGameState,
   action: gameAction.GameAction): GameState {
   return reducers.reduce((currentState, reducerFn) => reducerFn(currentState, action), state);
