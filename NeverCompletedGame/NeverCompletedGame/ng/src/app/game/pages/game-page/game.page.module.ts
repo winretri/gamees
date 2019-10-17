@@ -8,6 +8,9 @@ import { CommonModule } from '@angular/common';
   imports: [
     CommonModule,
     NeverEndingGameModule,
+  ],
+  exports: [
+    GamePage,
   ]
 })
 export class GamePageModule { }

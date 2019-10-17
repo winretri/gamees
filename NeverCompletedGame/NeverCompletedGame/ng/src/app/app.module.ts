@@ -1,3 +1,4 @@
+import { GameReducers } from './../never-ending-game/state/index.reducer';
 import { AppRoutingModule } from './app-routing.module';
 import { NeverEndingGameModule } from './../never-ending-game/never-ending-game.module';
 import { BrowserModule } from '@angular/platform-browser';
@@ -12,6 +13,8 @@ import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { NCG_BASE_URL } from 'src/never-ending-game/util/token';
 import { RxNeverCompletedGameService } from 'src/never-ending-game/service/rx.never-completed-game.service';
+import { GamePageModule } from './game/pages/game-page/game.page.module';
+import { StoreModule } from '@ngrx/store';
 
 @NgModule({
   declarations: [
@@ -26,7 +29,9 @@ import { RxNeverCompletedGameService } from 'src/never-ending-game/service/rx.ne
     HttpClientModule,
     FormsModule,
     NeverEndingGameModule,
+    GamePageModule,
     AppRoutingModule,
+    StoreModule.forRoot(GameReducers),
   ],
   providers: [
     RxNeverCompletedGameService,
