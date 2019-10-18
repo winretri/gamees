@@ -1,10 +1,12 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NeverCompletedGame.Commands;
 using Newtonsoft.Json;
+using Playing;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,6 +17,13 @@ namespace NeverCompletedGame.Controller
     [Route("api/[controller]")]
     public class CommandController : Microsoft.AspNetCore.Mvc.Controller
     {
+        private readonly ICommandHandlerFactory _commandHandlerFactory;
+
+        public CommandController(ICommandHandlerFactory commandHandlerFactory)
+        {
+            _commandHandlerFactory = commandHandlerFactory;
+        }
+
         // GET: api/<controller>
         [HttpGet]
         public IEnumerable<string> Get()
@@ -44,20 +53,10 @@ namespace NeverCompletedGame.Controller
 
         // POST api/<controller>
         [HttpPost]
-        public void Post([FromBody]Command value)
+        public void Post([FromBody]Command c)
         {
+            var ch = this._commandHandlerFactory.GetCommandHandler<ICommand>(c.Domain, c.AggregateType, c.Name);
         }
 
-        // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
     }
 }

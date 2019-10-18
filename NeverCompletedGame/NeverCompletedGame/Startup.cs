@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -22,6 +23,9 @@ namespace NeverCompletedGame
                 options.Cookie.IsEssential = true;
                 options.Cookie.Name = "ncg_session";
             });
+
+            services.AddSingleton<ICommandHandlerFactory, CommandHandlerFactory>();
+
             services.AddMvc();
             services.AddSpaStaticFiles(configuration =>
             {
