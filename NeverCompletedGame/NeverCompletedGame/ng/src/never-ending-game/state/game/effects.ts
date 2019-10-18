@@ -44,12 +44,23 @@ export class GameEffects {
       gameAction.GameActionTypes.INIT_GAME
     ),
     concatMap((action: gameAction.InitGame) => {
-      console.log('init action: '+this.localStorage.containsOpenGameId);
+      console.log('init action');
      if (this.localStorage.containsOpenGameId) {
        return of(new gameAction.LoadGame(this.localStorage.getOpenGameId()));
      } else {
        return of(new gameAction.OpenGame());
      }
+    })
+  );
+
+  @Effect()
+  resetGame$: Observable<Action> = this.actions$.pipe(
+    ofType<gameAction.ResetGame>(
+      gameAction.GameActionTypes.RESET_GAME
+    ),
+    concatMap((action: gameAction.ResetGame) => {
+      this.localStorage.resetOpenGame();
+      return of(new gameAction.InitGame());
     })
   );
 

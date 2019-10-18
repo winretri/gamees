@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { GameContainerComponent } from './../../../../never-ending-game/components/game-container/game-container.component';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'ncg-game-page',
@@ -8,9 +9,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GamePage implements OnInit {
 
+  @ViewChild('ncgContainer', {static: false})
+  public ncgContainer: GameContainerComponent;
+
   constructor() { }
 
   ngOnInit() {
+  }
+
+  public onDoReset(event: MouseEvent) {
+    console.log(this.ncgContainer);
+    this.ncgContainer.onReset();
   }
 
 }

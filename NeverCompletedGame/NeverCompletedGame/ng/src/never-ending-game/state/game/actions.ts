@@ -10,6 +10,7 @@ export enum GameActionTypes {
   LOAD_GAME = '[GAME] Load Game',
   LOAD_GAME_SUCCESS = '[GAME] Load Game Success',
   LOAD_GAME_FAIL = '[GAME] Load Game Fail',
+  RESET_GAME = '[GAME] Reset Game',
 }
 
 // ---- READ ----
@@ -62,5 +63,13 @@ export class LoadGameFail implements Action {
   }
 }
 
+export class ResetGame implements Action {
+  readonly type = GameActionTypes.RESET_GAME;
+
+  constructor() {
+  }
+}
+
 export type GameLoadAction = InitGame | OpenGame | OpenGameSuccess | LoadGame | LoadGameSuccess | LoadGameFail;
-export type GameAction = GameLoadAction;
+export type GamePlayAction = ResetGame;
+export type GameAction = GameLoadAction | GamePlayAction;

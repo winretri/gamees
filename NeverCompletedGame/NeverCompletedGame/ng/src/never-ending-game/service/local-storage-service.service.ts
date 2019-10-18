@@ -18,4 +18,10 @@ export class LocalStorageService {
      public getOpenGameId(): string {
        return this.storage.get(this.STORAGE_KEY);
      }
+
+     public resetOpenGame() {
+       if (this.containsOpenGameId) {
+         this.storage.remove(this.STORAGE_KEY);
+       }
+    }
 }

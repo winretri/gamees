@@ -21,6 +21,11 @@ export class GameContainerComponent implements OnInit, OnDestroy {
     this.store.dispatch(new gameAction.InitGame());
   }
 
+  public onReset(): void {
+    console.log('reset game container');
+    this.store.dispatch(new gameAction.ResetGame());
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next(null);
   }

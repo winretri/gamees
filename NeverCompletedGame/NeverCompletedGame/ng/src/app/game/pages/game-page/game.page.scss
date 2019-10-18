@@ -24,7 +24,32 @@
       box-sizing: border-box;
     }
   }
+  .sub-header {
+    width: 100%;
+    height: #{$sub-header-height}px;
+    position: absolute;
+    top: #{$top-height}px;
+    left: 0;
+    border-bottom: 1px solid #aaaaaa;
 
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    justify-items: center;
+    align-items: center;
+
+    .backbutton {
+      margin-left: 0.54em;
+      margin-bottom: -0.15em;
+    }
+
+    .flow-name {
+      font-size: 20px;
+      margin-bottom: -0.48em;
+      margin-left: 0.68em;
+    }
+  }
   main {
     position: absolute;
     top: #{$top-content}px;

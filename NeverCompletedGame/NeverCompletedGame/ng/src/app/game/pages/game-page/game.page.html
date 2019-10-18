@@ -2,8 +2,11 @@
     <header class="header">
       <h1>Never Completed Game</h1>
     </header>
+    <aside class="sub-header">
+      <ncg-game-button class="backbutton cursor-pointer" (gameClick)="onDoReset($event)"></ncg-game-button>
+    </aside>
     <main>
-      <ncg-game-container></ncg-game-container>
+      <ncg-game-container #ncgContainer ></ncg-game-container>
     </main>
 
   </div>
