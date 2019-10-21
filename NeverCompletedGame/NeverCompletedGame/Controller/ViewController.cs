@@ -19,28 +19,11 @@ namespace NeverCompletedGame.Controller
         }
 
         // GET: api/View/5
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("game/{id}")]
         public string Get(int id)
         {
             return "value";
         }
 
-        // POST: api/View
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT: api/View/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
     }
 }

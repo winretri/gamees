@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Infrastructure;
+using Infrastructure.EventEmitter;
+using Infrastructure.Views;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -30,6 +32,8 @@ namespace NeverCompletedGame
             services.AddDbContext<GameDbContext>();
             services.AddScoped<GameCommandHandler>();
             services.AddScoped<IRepository, EventSourcedGamesRepository>();
+            services.AddScoped<IViewStore, GameViewStore>();
+            services.AddScoped<IEventBus, EventEmitter>();
             services.AddMvc();
             services.AddSpaStaticFiles(configuration =>
             {

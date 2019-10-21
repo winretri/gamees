@@ -4,4 +4,12 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="riddles.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="riddles.json" />
+  </ItemGroup>
+
 </Project>

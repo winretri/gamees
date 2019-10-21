@@ -1,15 +1,18 @@
 [
   {
-    "riddle": "First letter of the alphabet?",
-    "solution": "A"
+    "question": "First letter of the alphabet?",
+    "solution": "A",
+    "level": 0
   },
   {
-    "riddle": "2 + 1 = _?",
-    "solution": "3"
+    "question": "2 + 1 = _?",
+    "solution": "3",
+    "level": 1
   },
   {
-    "riddle": "A, B, C, D, E, _?",
-    "solution": "F"
+    "question": "A, B, C, D, E, _?",
+    "solution": "F",
+    "level": 2
   }
 ]
 
