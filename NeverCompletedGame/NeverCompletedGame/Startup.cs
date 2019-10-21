@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NeverCompletedGame.Infrastructure;
 
 namespace NeverCompletedGame
 {
@@ -24,8 +25,11 @@ namespace NeverCompletedGame
                 options.Cookie.Name = "ncg_session";
             });
 
-            services.AddSingleton<ICommandHandlerFactory, CommandHandlerFactory>();
-
+            services.AddScoped<ICommandHandlerFactory, CommandHandlerFactory>();
+            services.AddScoped<ICommandFactory, CommandFactory>();
+            services.AddDbContext<GameDbContext>();
+            services.AddScoped<GameCommandHandler>();
+            services.AddScoped<IRepository, EventSourcedGamesRepository>();
             services.AddMvc();
             services.AddSpaStaticFiles(configuration =>
             {

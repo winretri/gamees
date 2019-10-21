@@ -5,8 +5,8 @@ using Playing;
 
 namespace Infrastructure
 {
-    public interface ICommandHandler<T> where T: ICommand
+    public interface ICommandHandler<in T> where T: ICommand
     {
-        void Handle(T command);
+        void Handle(string aggregateId, T command);
     }
 }

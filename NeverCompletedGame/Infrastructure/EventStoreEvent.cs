@@ -16,6 +16,8 @@ namespace Infrastructure
         [Key]
         public string Id { get; internal set; }
 
+        public DateTime Time { get; internal set; }
+
         public string DomainEventName { get; set; }
 
         public string AggregateId { get; internal set; }
