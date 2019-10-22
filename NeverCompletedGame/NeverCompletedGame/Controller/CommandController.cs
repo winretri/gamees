@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Infrastructure;
+using Infrastructure.Views;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NeverCompletedGame.Commands;
@@ -20,11 +21,13 @@ namespace NeverCompletedGame.Controller
     {
         private readonly ICommandHandlerFactory _commandHandlerFactory;
         private readonly ICommandFactory _commandFactory;
+        private readonly IViewStore _viewStore;
 
-        public CommandController(ICommandHandlerFactory commandHandlerFactory, ICommandFactory commandFactory)
+        public CommandController(ICommandHandlerFactory commandHandlerFactory, ICommandFactory commandFactory, IViewStore viewStore)
         {
             _commandHandlerFactory = commandHandlerFactory;
             _commandFactory = commandFactory;
+            _viewStore = viewStore;
         }
 
 
@@ -32,6 +35,7 @@ namespace NeverCompletedGame.Controller
         [HttpPost]
         public void Post([FromBody]Command c)
         {
+            _viewStore.Handle(new Opened(1,"1"));
             var ch = this._commandHandlerFactory.GetCommandHandler<ICommand>(c.Domain, c.AggregateType, c.Name);
             var com = this._commandFactory.GetCommand<ICommand>(c.Domain, c.AggregateType, c.Name, c.Payload);
             ch.Handle(c.AggregateId.ToString(), com);

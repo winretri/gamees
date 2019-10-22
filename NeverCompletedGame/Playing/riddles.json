@@ -1,18 +1,17 @@
 [
   {
-    "question": "First letter of the alphabet?",
-    "solution": "A",
-    "level": 0
+    "Question": "First letter of the alphabet?",
+    "Solution": "A",
+    "Level": 0
   },
   {
-    "question": "2 + 1 = _?",
-    "solution": "3",
-    "level": 1
+    "Question": "2 + 1 = _?",
+    "Solution": "3",
+    "Level": 1
   },
   {
-    "question": "A, B, C, D, E, _?",
-    "solution": "F",
-    "level": 2
+    "Question": "A, B, C, D, E, _?",
+    "Solution": "F",
+    "Level": 2
   }
 ]
-

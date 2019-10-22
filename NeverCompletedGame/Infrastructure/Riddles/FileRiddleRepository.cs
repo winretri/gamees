@@ -13,14 +13,16 @@ namespace Infrastructure.Riddles
         public Riddle GetRiddle(int level)
         {
             var ass = typeof(Riddle).GetTypeInfo().Assembly;
-            using (Stream resource = ass.GetManifestResourceStream("riddles.json"))
+            using (Stream resource = ass.GetManifestResourceStream("Playing.riddles.json"))
             {
                 using (var streamReader = new StreamReader(resource))
                 {
                     using (var jsonTextReader = new JsonTextReader(streamReader))
                     {
-                        JsonSerializer js = new JsonSerializer();
+                        
+                        JsonSerializer js = JsonSerializer.Create();
                         List<Riddle> riddles = js.Deserialize<List<Riddle>>(jsonTextReader);
+                        object x = js.Deserialize(jsonTextReader);
                         Riddle riddle = riddles.FirstOrDefault(r => r.Level == level);
                         return riddle;
                     }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Infrastructure;
 using Infrastructure.EventEmitter;
+using Infrastructure.Riddles;
 using Infrastructure.Views;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -30,6 +31,8 @@ namespace NeverCompletedGame
             services.AddScoped<ICommandHandlerFactory, CommandHandlerFactory>();
             services.AddScoped<ICommandFactory, CommandFactory>();
             services.AddDbContext<GameDbContext>();
+            services.AddDbContext<GameViewDbContext>();
+            services.AddScoped<IRiddleRepository, FileRiddleRepository>();
             services.AddScoped<GameCommandHandler>();
             services.AddScoped<IRepository, EventSourcedGamesRepository>();
             services.AddScoped<IViewStore, GameViewStore>();

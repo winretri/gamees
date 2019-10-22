@@ -2,20 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Infrastructure.EventEmitter;
 using Infrastructure.Riddles;
 using Playing;
 
 namespace Infrastructure.Views
 {
-    public class GameViewStore : IViewStore
+    public sealed class GameViewStore : IViewStore, IDisposable
     {
         private readonly GameViewDbContext _context;
         private readonly IRiddleRepository _riddleRepository;
+        private readonly IDisposable _subscription;
 
-        public GameViewStore(GameViewDbContext context, IRiddleRepository riddleRepository)
+        public GameViewStore(GameViewDbContext context, IRiddleRepository riddleRepository, IEventBus eventBus)
         {
             _context = context;
             _riddleRepository = riddleRepository;
+            _subscription = eventBus.Events.Subscribe(args => Handle(args.EventArgs));
         }
         public void Handle(IEvent e)
         {
@@ -31,7 +34,7 @@ namespace Infrastructure.Views
             GameReadModel grm = new GameReadModel();
             grm.Id = e.Id;
             grm.Level = e.Level;
-            grm.Question = "";
+            grm.Question = _riddleRepository.GetRiddle(e.Level).Question;
             grm.Score = e.Score;
         }
 
@@ -45,6 +48,11 @@ namespace Infrastructure.Views
             }
 
             return null;
+        }
+
+        public void Dispose()
+        {
+            _subscription?.Dispose();
         }
     }
 }
