@@ -46,4 +46,16 @@ export class RxNeverCompletedGameService {
     return this.http.post(this.url.serialize(), body).pipe(map(() => aggregateId));
   }
 
+  public makeGuess(gameId: GameId, guess: string): Observable<GameId> {
+    const name = 'makeguess';
+    const domain = 'playing';
+    const aggregateType = 'game';
+    const aggregateId = gameId;
+    const payload = { id : aggregateId, guess: guess };
+    const pls: string = JSON.stringify(payload);
+    const body = { name, domain, aggregateType, aggregateId, payload : pls };
+    console.log(body);
+    return this.http.post(this.url.serialize(), body).pipe(map(() => aggregateId));
+  }
+
 }

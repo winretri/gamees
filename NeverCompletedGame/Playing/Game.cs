@@ -24,7 +24,7 @@ namespace Playing
 
         public static IEnumerable<Type> DomainEventTypes
         {
-            get { return Assembly.GetExecutingAssembly().GetTypes().Where(t => t.IsAssignableFrom(typeof(IEvent))); }
+            get { return Assembly.GetExecutingAssembly().GetTypes().Where(t => typeof(IEvent).IsAssignableFrom(t)); }
         }
 
         public int Attempts { get; internal set; }

@@ -91,4 +91,19 @@ export class GameEffects {
     )
   );
 
+  @Effect()
+  makeGuess$: Observable<Action> = this.actions$.pipe(
+    ofType<gameAction.MakeGuess>(
+      gameAction.GameActionTypes.MAKE_GUESS
+    ),
+    concatMap((action: gameAction.MakeGuess) =>
+      this.gameService.makeGuess(action.payload.gameId, action.payload.solution).pipe(
+        map((gameId: GameId) => new gameAction.LoadGame(gameId)),
+        catchError(err => {
+          return of(new gameAction.LoadGame(err));
+        })
+      )
+    )
+  );
+
 }

@@ -6,7 +6,7 @@ using Infrastructure.EventEmitter;
 
 namespace Infrastructure
 {
-    public class GameCommandHandler : ICommandHandler<ICommand>, ICommandHandler<Open>, ICommandHandler<Close>
+    public class GameCommandHandler : ICommandHandler<ICommand>, ICommandHandler<Open>, ICommandHandler<Close>, ICommandHandler<MakeGuess>
     {
         private IRepository repo;
         private IEventBus eventBus;

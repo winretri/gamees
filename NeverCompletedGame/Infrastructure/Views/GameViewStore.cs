@@ -51,6 +51,7 @@ namespace Infrastructure.Views
             GameReadModel grm = this._context.Games.FirstOrDefault(game => game.Id == e.Id);
             grm.Level = e.NewLevel;
             grm.Score = e.NewScore;
+            grm.Question = _riddleRepository.GetRiddle(e.NewLevel).Question;
             this._context.SaveChanges();
         }
 
