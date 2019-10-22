@@ -39,6 +39,17 @@ export class GameEffects {
   );
 
   @Effect()
+  openGameSuccess$: Observable<Action> = this.actions$.pipe(
+    ofType<gameAction.OpenGameSuccess>(
+      gameAction.GameActionTypes.OPEN_GAME_SUCCESS
+    ),
+    concatMap((action: gameAction.OpenGameSuccess) => {
+      console.log('open success action');
+       return of(new gameAction.LoadGame(action.payload));
+    })
+  );
+
+  @Effect()
   initGame$: Observable<Action> = this.actions$.pipe(
     ofType<gameAction.InitGame>(
       gameAction.GameActionTypes.INIT_GAME
@@ -62,6 +73,21 @@ export class GameEffects {
       this.localStorage.resetOpenGame();
       return of(new gameAction.InitGame());
     })
+  );
+
+  @Effect()
+  loadGame$: Observable<Action> = this.actions$.pipe(
+    ofType<gameAction.LoadGame>(
+      gameAction.GameActionTypes.LOAD_GAME
+    ),
+    concatMap((action: gameAction.LoadGame) =>
+      this.gameService.fetchGame(action.payload).pipe(
+        map((game: IGame) => new gameAction.LoadGameSuccess(game)),
+        catchError(err => {
+          return of(new gameAction.LoadGameFail(err));
+        })
+      )
+    )
   );
 
 }

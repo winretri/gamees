@@ -35,7 +35,6 @@ namespace NeverCompletedGame.Controller
         [HttpPost]
         public void Post([FromBody]Command c)
         {
-            _viewStore.Handle(new Opened(1,"1"));
             var ch = this._commandHandlerFactory.GetCommandHandler<ICommand>(c.Domain, c.AggregateType, c.Name);
             var com = this._commandFactory.GetCommand<ICommand>(c.Domain, c.AggregateType, c.Name, c.Payload);
             ch.Handle(c.AggregateId.ToString(), com);

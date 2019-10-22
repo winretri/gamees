@@ -33,6 +33,24 @@ function initGameReducer(state: GameState, action: gameAction.GameAction): GameS
           gameId: action.payload,
           error: ''
         };
+    case gameAction.GameActionTypes.LOAD_GAME:
+      return {
+        ...state,
+        loading: true,
+      };
+    case gameAction.GameActionTypes.LOAD_GAME_SUCCESS:
+      return gameAdapter.upsertOne(action.payload, {
+        ...state,
+        gameId: action.payload.id,
+        loaded: true,
+        loading: false,
+      });
+    case gameAction.GameActionTypes.LOAD_GAME_FAIL:
+      return {
+        ...state,
+        loaded: false,
+        loading: false,
+      };
     default:
       return state;
   }

@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace Infrastructure.Views
 {
     public class GameReadModel
     {
+
         public string Id { get; internal set; }
 
         public int Level { get; internal set; }

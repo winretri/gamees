@@ -1,9 +1,12 @@
+import { IGame } from './../../model/game.interface';
 import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import { Subject } from 'rxjs';
 
 import * as gameAction from '../../state/';
+import { gameSelectors } from 'src/never-ending-game/state/game/selectors';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'ncg-game-container',
@@ -14,11 +17,29 @@ export class GameContainerComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<null>();
 
+  public game: IGame;
+
+  public gameLoaded = false;
+
   constructor(private store: Store<any>) { }
 
   ngOnInit() {
     console.log('game container');
     this.store.dispatch(new gameAction.InitGame());
+
+    this.store.select(gameSelectors.getGame)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(game => {
+        this.game = game;
+      }
+     );
+
+    this.store.select(gameSelectors.getGameLoaded)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(gameLoaded => {
+        this.gameLoaded = gameLoaded;
+      }
+     );
   }
 
   public onReset(): void {

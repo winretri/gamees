@@ -22,7 +22,6 @@ namespace Infrastructure.Riddles
                         
                         JsonSerializer js = JsonSerializer.Create();
                         List<Riddle> riddles = js.Deserialize<List<Riddle>>(jsonTextReader);
-                        object x = js.Deserialize(jsonTextReader);
                         Riddle riddle = riddles.FirstOrDefault(r => r.Level == level);
                         return riddle;
                     }

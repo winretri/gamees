@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Infrastructure.Views;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,18 +12,23 @@ namespace NeverCompletedGame.Controller
     [ApiController]
     public class ViewController : ControllerBase
     {
-        // GET: api/View
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly IViewStore _viewStore;
+
+        public ViewController(IViewStore viewStore)
         {
-            return new string[] { "value1", "value2" };
+            _viewStore = viewStore;
         }
 
-        // GET: api/View/5
-        [HttpGet("game/{id}")]
-        public string Get(int id)
+        [HttpGet("games/{id}")]
+        public ActionResult<GameView> Get(string id)
         {
-            return "value";
+            GameView game = _viewStore.Get(id);
+            if (game == null)
+            {
+                return NotFound();
+            }
+
+            return game;
         }
 
     }

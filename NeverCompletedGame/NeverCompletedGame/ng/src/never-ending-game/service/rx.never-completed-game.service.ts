@@ -17,7 +17,7 @@ export class RxNeverCompletedGameService {
     @Inject(NCG_BASE_URL) baseUrl: string
   ) {
     this.url = new Url([baseUrl, 'api', 'command'], {});
-    this.viewUrl = new Url([baseUrl, 'api', 'games'], {});
+    this.viewUrl = new Url([baseUrl, 'api', 'view', 'games'], {});
   }
 
   public fetchData(): Observable<string[]> {
@@ -31,7 +31,7 @@ export class RxNeverCompletedGameService {
   }
 
   private gameUrl(gameId: GameId): Url {
-    return this.url.addPaths(gameId);
+    return this.viewUrl.addPaths(gameId);
   }
 
   public openGame(): Observable<GameId> {
@@ -45,4 +45,5 @@ export class RxNeverCompletedGameService {
     console.log(body);
     return this.http.post(this.url.serialize(), body).pipe(map(() => aggregateId));
   }
+
 }

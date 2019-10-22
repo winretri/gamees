@@ -7,6 +7,17 @@ namespace Infrastructure
 {
     public class GameDbContext : DbContext
     {
-        public DbSet<EventStoreEvent> Events;
+        public GameDbContext(DbContextOptions<GameDbContext> options) : base(options)
+        {
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder
+                .Entity<EventStoreEvent>()
+                .HasKey(ese => ese.Id);
+        }
+
+        public DbSet<EventStoreEvent> Events { get; set; }
     }
 }

@@ -7,6 +7,17 @@ namespace Infrastructure.Views
 {
     public class GameViewDbContext : DbContext
     {
-        public DbSet<GameReadModel> Games;
+        public GameViewDbContext(DbContextOptions<GameViewDbContext> options) : base(options)
+        {
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder
+                .Entity<GameReadModel>()
+                .HasKey(grm => grm.Id);
+        }
+
+        public DbSet<GameReadModel> Games { get; set; }
     }
 }

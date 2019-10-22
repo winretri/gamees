@@ -36,6 +36,8 @@ namespace Infrastructure.Views
             grm.Level = e.Level;
             grm.Question = _riddleRepository.GetRiddle(e.Level).Question;
             grm.Score = e.Score;
+            this._context.Games.Add(grm);
+            this._context.SaveChanges();
         }
 
         public GameView Get(string id)
