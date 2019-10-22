@@ -21,6 +21,10 @@ export class GameContainerComponent implements OnInit, OnDestroy {
 
   public gameLoaded = false;
 
+  public gameMenuLoaded = false;
+
+  public solution: string;
+
   constructor(private store: Store<any>) { }
 
   ngOnInit() {

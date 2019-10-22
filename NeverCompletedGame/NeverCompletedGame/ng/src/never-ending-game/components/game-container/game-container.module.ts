@@ -1,3 +1,4 @@
+import { FormsModule } from '@angular/forms';
 import { GameContainerComponent } from './game-container.component';
 import { LocalStorageService } from './../../service/local-storage-service.service';
 import { RxNeverCompletedGameService } from 'src/never-ending-game/service/rx.never-completed-game.service';
@@ -7,7 +8,8 @@ import { CommonModule } from '@angular/common';
 @NgModule({
   declarations: [GameContainerComponent],
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule
   ],
   providers: [
     RxNeverCompletedGameService,

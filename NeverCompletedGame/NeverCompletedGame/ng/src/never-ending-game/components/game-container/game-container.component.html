@@ -1,6 +1,17 @@
 <div class="game-container">
-    GAME: <ng-container *ngIf="game">{{game.question}}</ng-container>
+  <ng-container *ngIf="game">
+    <h2 id="level">{{game.level}}</h2>
+    <div class="question">
+      <p>{{game.question}}</p>
+    </div>
+    <div class="answer-container">
+      <span class="answer-button">
+        <i class="fa fa-send"></i>
+      </span>
+      <input [(ngModel)]="solution" type="text" name="name" class="answer" autofocus="autofocus" autocomplete="off">
+    </div>
+  </ng-container>
 </div>
 <div class="game-menu">
-    GAME MENU
+    GAME MENU {{solution}}
 </div>
