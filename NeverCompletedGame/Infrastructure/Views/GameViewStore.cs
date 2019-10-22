@@ -25,7 +25,13 @@ namespace Infrastructure.Views
             switch (e)
             {
                 case Opened opened: Handle(opened);
-                break;
+                    break;
+                case LevelSucceeded succeeded:
+                    Handle(succeeded);
+                    break;
+                case LevelFailed failed:
+                    Handle(failed);
+                    break;
             }
         }
 
@@ -37,6 +43,21 @@ namespace Infrastructure.Views
             grm.Question = _riddleRepository.GetRiddle(e.Level).Question;
             grm.Score = e.Score;
             this._context.Games.Add(grm);
+            this._context.SaveChanges();
+        }
+
+        private void Handle(LevelSucceeded e)
+        {
+            GameReadModel grm = this._context.Games.FirstOrDefault(game => game.Id == e.Id);
+            grm.Level = e.NewLevel;
+            grm.Score = e.NewScore;
+            this._context.SaveChanges();
+        }
+
+        private void Handle(LevelFailed e)
+        {
+            GameReadModel grm = this._context.Games.FirstOrDefault(game => game.Id == e.Id);
+            grm.Score = e.NewScore;
             this._context.SaveChanges();
         }
 

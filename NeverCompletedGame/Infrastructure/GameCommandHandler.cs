@@ -25,6 +25,14 @@ namespace Infrastructure
             eventBus.Emit(newGame.UncomittedEvents);
         }
 
+        public void Handle(string aggregateId, MakeGuess command)
+        {
+            Game newGame = repo.Restore(aggregateId) ?? new Game();
+            command.Handle(newGame);
+            repo.Save(newGame);
+            eventBus.Emit(newGame.UncomittedEvents);
+        }
+
         public void Handle(string aggregateId, Close command)
         {
             Game newGame = repo.Restore(aggregateId) ?? new Game();
@@ -39,6 +47,9 @@ namespace Infrastructure
             {
                 case Open o:
                     this.Handle(aggregateId, o);
+                    break;
+                case MakeGuess mg:
+                    this.Handle(aggregateId, mg);
                     break;
                 case Close c:
                     this.Handle(aggregateId, c);

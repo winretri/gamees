@@ -12,4 +12,8 @@
     <EmbeddedResource Include="riddles.json" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3-beta2" />
+  </ItemGroup>
+
 </Project>

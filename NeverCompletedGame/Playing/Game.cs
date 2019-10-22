@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using Newtonsoft.Json;
 
 namespace Playing
 {
@@ -25,6 +27,10 @@ namespace Playing
             get { return Assembly.GetExecutingAssembly().GetTypes().Where(t => t.IsAssignableFrom(typeof(IEvent))); }
         }
 
+        public int Attempts { get; internal set; }
+
+        public Riddle CurrentRiddle => GetRiddle(Level);
+
         public string Id { get; internal set; }
         public bool IsOpened { get; internal set; } = false;
 
@@ -37,6 +43,44 @@ namespace Playing
         #endregion
 
         #region Public Methods and Operators
+
+        public static Riddle GetRiddle(int level)
+        {
+            var ass = typeof(Riddle).GetTypeInfo().Assembly;
+            using (Stream resource = ass.GetManifestResourceStream("Playing.riddles.json"))
+            {
+                using (var streamReader = new StreamReader(resource))
+                {
+                    using (var jsonTextReader = new JsonTextReader(streamReader))
+                    {
+                        JsonSerializer js = JsonSerializer.Create();
+                        List<Riddle> riddles = js.Deserialize<List<Riddle>>(jsonTextReader);
+                        Riddle riddle = riddles.FirstOrDefault(r => r.Level == level);
+                        return riddle;
+                    }
+                }
+            }
+        }
+
+        public void MakeGuess(string guess)
+        {
+            IEvent e = new GuessMade(this.Id, guess);
+            e.Handle(this);
+            PublishEvent(e);
+            if (CurrentRiddle.Solution.Trim().Equals(guess))
+            {
+                IEvent levelSucceeded = new LevelSucceeded(this.Id,this.Level + 1, this.Score + 1*Level);
+                levelSucceeded.Handle(this);
+                PublishEvent(levelSucceeded);
+            }
+            else
+            {
+                int newScore = (this.Score - 1) < 0 ? 0 : this.Score - 1;
+                IEvent levelFailed = new LevelFailed(this.Id, newScore);
+                levelFailed.Handle(this);
+                PublishEvent(levelFailed);
+            }
+        }
 
         public void Open(string id)
         {
@@ -81,6 +125,35 @@ namespace Playing
             }
 
             game.Open(Id);
+        }
+
+        #endregion
+    }
+
+    [Aggregate(typeof(Game))]
+    public class MakeGuess : ICommand
+    {
+        #region Public Properties
+
+        public string Guess { get; set; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        public void Handle(Game game)
+        {
+            if (Guess == null)
+            {
+                throw new Exception("Missing command parameter 'guess'");
+            }
+
+            if (game != null && !game.IsOpened)
+            {
+                throw new Exception("Game is not open");
+            }
+
+            game.MakeGuess(Guess);
         }
 
         #endregion
@@ -142,6 +215,101 @@ namespace Playing
             game.Level = _level;
             game.Id = _id;
             game.Score = 0;
+        }
+
+        #endregion
+    }
+
+    public class GuessMade : IEvent
+    {
+        #region Constructors and Destructors
+
+        public GuessMade(string id,
+            string guess)
+        {
+            Guess = guess;
+            Id = id;
+        }
+
+        #endregion
+
+        #region Public Properties
+
+        public string Guess { get; }
+
+        public string Id { get; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        public void Handle(Game game)
+        {
+            game.Attempts += 1;
+        }
+
+        #endregion
+    }
+
+    public class LevelSucceeded : IEvent
+    {
+        #region Constructors and Destructors
+
+        public LevelSucceeded(string id, int newLevel, int newScore)
+        {
+            this.Id = id;
+            this.NewLevel = newLevel;
+            this.NewScore = newScore;
+        }
+
+        #endregion
+
+        #region Public Properties
+
+        public string Id { get; }
+
+        public int NewLevel { get; }
+
+        public int NewScore { get; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        public void Handle(Game game)
+        {
+            game.Level = NewLevel;
+            game.Score = NewScore;
+        }
+
+        #endregion
+    }
+
+    public class LevelFailed : IEvent
+    {
+        #region Constructors and Destructors
+
+        public LevelFailed(string id, int newScore)
+        {
+            this.Id = id;
+            this.NewScore = newScore;
+        }
+
+        #endregion
+
+        #region Public Properties
+
+        public string Id { get; }
+
+        public int NewScore { get; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        public void Handle(Game game)
+        {
+            game.Score = NewScore;
         }
 
         #endregion
