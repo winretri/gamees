@@ -44,7 +44,8 @@ export class GameEffects {
       gameAction.GameActionTypes.OPEN_GAME_SUCCESS
     ),
     concatMap((action: gameAction.OpenGameSuccess) => {
-      console.log('open success action');
+       console.log('open success action');
+       this.localStorage.storeOpenGameId(action.payload);
        return of(new gameAction.LoadGame(action.payload));
     })
   );

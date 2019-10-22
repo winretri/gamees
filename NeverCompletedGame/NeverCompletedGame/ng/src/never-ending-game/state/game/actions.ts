@@ -1,3 +1,4 @@
+import { MakeGuessEvent } from './../../model/game.event.interface';
 import { Action } from '@ngrx/store';
 import { GameId, IGame } from '../../model';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -10,6 +11,7 @@ export enum GameActionTypes {
   LOAD_GAME = '[GAME] Load Game',
   LOAD_GAME_SUCCESS = '[GAME] Load Game Success',
   LOAD_GAME_FAIL = '[GAME] Load Game Fail',
+  MAKE_GUESS = '[GAME] Make Guess',
   RESET_GAME = '[GAME] Reset Game',
 }
 
@@ -63,6 +65,13 @@ export class LoadGameFail implements Action {
   }
 }
 
+export class MakeGuess implements Action {
+  readonly type = GameActionTypes.MAKE_GUESS;
+
+  constructor(public payload: MakeGuessEvent) {
+  }
+}
+
 export class ResetGame implements Action {
   readonly type = GameActionTypes.RESET_GAME;
 
@@ -71,5 +80,5 @@ export class ResetGame implements Action {
 }
 
 export type GameLoadAction = InitGame | OpenGame | OpenGameSuccess | LoadGame | LoadGameSuccess | LoadGameFail;
-export type GamePlayAction = ResetGame;
+export type GamePlayAction = ResetGame | MakeGuess;
 export type GameAction = GameLoadAction | GamePlayAction;

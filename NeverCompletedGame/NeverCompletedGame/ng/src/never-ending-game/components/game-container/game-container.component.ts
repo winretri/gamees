@@ -1,3 +1,4 @@
+import { MakeGuess } from './../../state/game/actions';
 import { IGame } from './../../model/game.interface';
 import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -44,6 +45,17 @@ export class GameContainerComponent implements OnInit, OnDestroy {
         this.gameLoaded = gameLoaded;
       }
      );
+  }
+
+  onKeyUpEnter(event: KeyboardEvent) {
+    this.makeGuess();
+  }
+
+  makeGuess() {
+    this.store.dispatch(new MakeGuess({
+      gameId: this.game.id,
+      solution: this.solution,
+    }));
   }
 
   public onReset(): void {

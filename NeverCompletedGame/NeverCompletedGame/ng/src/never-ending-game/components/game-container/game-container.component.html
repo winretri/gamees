@@ -8,7 +8,7 @@
       <span class="answer-button">
         <i class="fa fa-send"></i>
       </span>
-      <input [(ngModel)]="solution" type="text" name="name" class="answer" autofocus="autofocus" autocomplete="off">
+      <input [(ngModel)]="solution" (keyup.enter)="onKeyUpEnter($event)" type="text" name="name" class="answer" autofocus="autofocus" autocomplete="off">
     </div>
   </ng-container>
 </div>
