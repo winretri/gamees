@@ -21,13 +21,17 @@ namespace Infrastructure
         {
             var now = DateTime.UtcNow;
             List<EventStoreEvent> esEvents = new List<EventStoreEvent>();
-            foreach (IEvent e in game.UncomittedEvents)
+
+            foreach (var item in game.UncomittedEvents.Select((value, i) =>  new { i, value }))
             {
+                int sequence = item.i;
+                IEvent e = item.value;
                 EventStoreEvent ese = new EventStoreEvent();
                 ese.AggregateId = game.Id;
                 ese.Id = Guid.NewGuid().ToString();
                 ese.DomainEventName = e.GetType().Name;
                 ese.Time = now;
+                ese.Sequence = sequence;
                 ese.EventContainer = JsonConvert.SerializeObject(e);
                 esEvents.Add(ese);
             }
@@ -37,7 +41,7 @@ namespace Infrastructure
 
         public Game Restore(string gameId)
         {
-            List<EventStoreEvent> events = this.context.Events.Where(e => e.AggregateId == gameId).OrderBy(e => e.Time).ToList();
+            List<EventStoreEvent> events = this.context.Events.Where(e => e.AggregateId == gameId).OrderBy(e => e.Time).ThenBy(e => e.Sequence).ToList();
             Game g = new Game();
             List<IEvent> domainEvents = events.Select(GetDomainEventForEventStoreEvent).ToList();
             foreach (IEvent domainEvent in domainEvents)
