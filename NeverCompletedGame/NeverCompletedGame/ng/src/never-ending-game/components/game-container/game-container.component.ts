@@ -1,3 +1,4 @@
+import { RxEventListenerService } from './../../service/rx.event-listener.service';
 import { MakeGuess } from './../../state/game/actions';
 import { IGame } from './../../model/game.interface';
 import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
@@ -26,7 +27,9 @@ export class GameContainerComponent implements OnInit, OnDestroy {
 
   public solution: string;
 
-  constructor(private store: Store<any>) { }
+  public event: string;
+
+  constructor(private store: Store<any>, private eventListener: RxEventListenerService) { }
 
   ngOnInit() {
     console.log('game container');
@@ -39,10 +42,19 @@ export class GameContainerComponent implements OnInit, OnDestroy {
       }
      );
 
+
+
     this.store.select(gameSelectors.getGameLoaded)
     .pipe(takeUntil(this.destroy$))
     .subscribe(gameLoaded => {
         this.gameLoaded = gameLoaded;
+      }
+     );
+
+     this.eventListener.getMessage()
+     .pipe(takeUntil(this.destroy$))
+     .subscribe(event => {
+        this.event = event;
       }
      );
   }

@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.SignalR;
 
-namespace NeverCompletedGame.EventHub
+namespace NeverCompletedGame.Events
 {
-    public class EventHub : Hub
+    public interface IEventBusHubBridge
     {
     }
 }

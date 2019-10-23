@@ -1,3 +1,4 @@
+import { RxEventListenerService } from './../../service/rx.event-listener.service';
 import { GameId } from './../../model/game.interface';
 import { LocalStorageService } from './../../service/local-storage-service.service';
 import { Injectable } from '@angular/core';
@@ -6,7 +7,7 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 
 import { Observable, of } from 'rxjs';
-import { catchError, concatMap, map } from 'rxjs/operators';
+import { catchError, concatMap, map, filter, tap, switchMap } from 'rxjs/operators';
 
 import * as gameAction from './actions';
 
@@ -19,7 +20,8 @@ export class GameEffects {
   constructor(
     private actions$: Actions,
     private gameService: RxNeverCompletedGameService,
-    private localStorage: LocalStorageService
+    private localStorage: LocalStorageService,
+    private eventListener: RxEventListenerService
   ) {
   }
 
@@ -102,6 +104,19 @@ export class GameEffects {
         catchError(err => {
           return of(new gameAction.LoadGame(err));
         })
+      )
+    )
+  );
+
+
+  @Effect()
+  loadGameSuccess$: Observable<Action> = this.actions$.pipe(
+    ofType<gameAction.LoadGameSuccess>(
+      gameAction.GameActionTypes.LOAD_GAME_SUCCESS
+    ),
+    concatMap((action: gameAction.LoadGameSuccess) =>
+      this.eventListener.startConnection(action.payload.id).pipe(
+        map((b) => b ? {type: 'success'} : {type: 'fail'})
       )
     )
   );

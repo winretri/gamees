@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NeverCompletedGame.Events;
 using NeverCompletedGame.Infrastructure;
 
 namespace NeverCompletedGame
@@ -35,6 +36,7 @@ namespace NeverCompletedGame
             services.AddScoped<ICommandFactory, CommandFactory>();
             services.AddDbContext<GameDbContext>((builder => builder.UseSqlite(connectionStringEvent)));
             services.AddDbContext<GameViewDbContext>((builder => builder.UseSqlite(connectionStringView)));
+            services.AddScoped<IEventBusHubBridge, EventBusHubBridge>();
             services.AddScoped<IRiddleRepository, FileRiddleRepository>();
             services.AddScoped<GameCommandHandler>();
             services.AddScoped<IRepository, EventSourcedGamesRepository>();
@@ -68,7 +70,7 @@ namespace NeverCompletedGame
             {
                 app.UseSpaStaticFiles();
             }
-
+            
             app.UseSession();
             app.UseRouting();
 
@@ -77,6 +79,7 @@ namespace NeverCompletedGame
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+                endpoints.MapHub<EventHub>("/events");
             });
 
             app.UseSpa(spa =>

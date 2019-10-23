@@ -5,6 +5,7 @@ import { RxNeverCompletedGameService } from './service/rx.never-completed-game.s
 import { GameContainerComponent } from './components/game-container/game-container.component';
 import { LocalStorageService } from './service/local-storage-service.service';
 import { GameButtonModule } from './components/game-button/game-button.module';
+import { RxEventListenerService } from './service';
 
 @NgModule({
   declarations: [],
@@ -20,6 +21,7 @@ import { GameButtonModule } from './components/game-button/game-button.module';
   providers: [
     RxNeverCompletedGameService,
     LocalStorageService,
+    RxEventListenerService,
   ]
 })
 export class NeverEndingGameModule { }

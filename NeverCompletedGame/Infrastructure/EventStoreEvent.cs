@@ -1,27 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Infrastructure
 {
     public class EventStoreEvent
     {
+        #region Public Properties
+
+        public string AggregateId { get; internal set; }
+
+        public string DomainEventName { get; set; }
 
         public virtual string EventContainer { get; set; }
+
+        public int EventContainerVersion { get; internal set; }
 
         [Key]
         public string Id { get; internal set; }
 
+        public int Sequence { get; internal set; }
+
         public DateTime Time { get; internal set; }
 
-        public string DomainEventName { get; set; }
-
-        public string AggregateId { get; internal set; }
-
-
+        #endregion
     }
 }

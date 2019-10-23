@@ -6,6 +6,7 @@ using Infrastructure.Views;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NeverCompletedGame.Commands;
+using NeverCompletedGame.Events;
 using NeverCompletedGame.Infrastructure;
 using Newtonsoft.Json;
 using Playing;
@@ -23,12 +24,14 @@ namespace NeverCompletedGame.Controller
         private readonly ICommandHandlerFactory _commandHandlerFactory;
         private readonly ICommandFactory _commandFactory;
         private readonly IViewStore _viewStore;
+        private readonly IEventBusHubBridge _bridge;
 
-        public CommandController(ICommandHandlerFactory commandHandlerFactory, ICommandFactory commandFactory, IViewStore viewStore)
+        public CommandController(ICommandHandlerFactory commandHandlerFactory, ICommandFactory commandFactory, IViewStore viewStore, IEventBusHubBridge bridge)
         {
             _commandHandlerFactory = commandHandlerFactory;
             _commandFactory = commandFactory;
             _viewStore = viewStore;
+            _bridge = bridge;
         }
 
 
