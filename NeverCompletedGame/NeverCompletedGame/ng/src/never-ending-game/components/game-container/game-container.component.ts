@@ -29,6 +29,8 @@ export class GameContainerComponent implements OnInit, OnDestroy {
 
   public event: string;
 
+  public answerClass: string;
+
   constructor(private store: Store<any>, private eventListener: RxEventListenerService) { }
 
   ngOnInit() {
@@ -54,7 +56,12 @@ export class GameContainerComponent implements OnInit, OnDestroy {
      this.eventListener.getMessage()
      .pipe(takeUntil(this.destroy$))
      .subscribe(event => {
-        this.event = event;
+       this.event = event;
+       if (event === 'LevelSucceeded') {
+         this.answerClass = 'right';
+       } else if (event === 'LevelFailed') {
+         this.answerClass = 'wrong';
+       }
       }
      );
   }
@@ -63,7 +70,12 @@ export class GameContainerComponent implements OnInit, OnDestroy {
     this.makeGuess();
   }
 
+  onKeyUp(event: KeyboardEvent) {
+    this.answerClass = '';
+  }
+
   makeGuess() {
+    this.answerClass = '';
     this.store.dispatch(new MakeGuess({
       gameId: this.game.id,
       solution: this.solution,
