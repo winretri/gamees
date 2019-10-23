@@ -12,6 +12,8 @@ export enum GameActionTypes {
   LOAD_GAME_SUCCESS = '[GAME] Load Game Success',
   LOAD_GAME_FAIL = '[GAME] Load Game Fail',
   MAKE_GUESS = '[GAME] Make Guess',
+  MAKE_GUESS_SUCCESS = '[GAME] Make Guess Success',
+  MAKE_GUESS_FAIL = '[GAME] Make Guess Fail',
   RESET_GAME = '[GAME] Reset Game',
 }
 
@@ -69,6 +71,20 @@ export class MakeGuess implements Action {
   readonly type = GameActionTypes.MAKE_GUESS;
 
   constructor(public payload: MakeGuessEvent) {
+  }
+}
+
+export class MakeGuessSuccess implements Action {
+  readonly type = GameActionTypes.MAKE_GUESS_SUCCESS;
+
+  constructor(public payload: GameId) {
+  }
+}
+
+export class MakeGuessFail implements Action {
+  readonly type = GameActionTypes.MAKE_GUESS_FAIL;
+
+  constructor(public payload: HttpErrorResponse) {
   }
 }
 

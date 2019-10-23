@@ -84,6 +84,22 @@
       border-color: red;
       animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
     }
+    .correct {
+      color: rgb(25, 204, 25);
+      border-color: rgb(25, 204, 25);
+      animation: zoominout 0.82s cubic-bezier(.36,.07,.19,.97) both;
+    }
+    @keyframes zoominout {
+      0% {
+          transform: scale(1,1);
+      }
+      50% {
+          transform: scale(1.05,1.05);
+      }
+      100% {
+          transform: scale(1,1);
+      }
+    }
     @keyframes shake {
       10%, 90% {
         transform: translate3d(-2px, 0, 0);

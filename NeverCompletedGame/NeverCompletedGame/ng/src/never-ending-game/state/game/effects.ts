@@ -46,7 +46,6 @@ export class GameEffects {
       gameAction.GameActionTypes.OPEN_GAME_SUCCESS
     ),
     concatMap((action: gameAction.OpenGameSuccess) => {
-       console.log('open success action');
        this.localStorage.storeOpenGameId(action.payload);
        return of(new gameAction.LoadGame(action.payload));
     })
@@ -100,9 +99,9 @@ export class GameEffects {
     ),
     concatMap((action: gameAction.MakeGuess) =>
       this.gameService.makeGuess(action.payload.gameId, action.payload.solution).pipe(
-        map((gameId: GameId) => new gameAction.LoadGame(gameId)),
+        map((gameId: GameId) => new gameAction.MakeGuessSuccess(gameId)),
         catchError(err => {
-          return of(new gameAction.LoadGame(err));
+          return of(new gameAction.MakeGuessFail(err));
         })
       )
     )

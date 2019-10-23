@@ -1,5 +1,5 @@
 import { RxEventListenerService } from './../../service/rx.event-listener.service';
-import { MakeGuess } from './../../state/game/actions';
+import { MakeGuess, LoadGame } from './../../state/game/actions';
 import { IGame } from './../../model/game.interface';
 import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -41,6 +41,8 @@ export class GameContainerComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.destroy$))
     .subscribe(game => {
         this.game = game;
+        this.reset();
+        console.log('game set');
       }
      );
 
@@ -58,7 +60,11 @@ export class GameContainerComponent implements OnInit, OnDestroy {
      .subscribe(event => {
        this.event = event;
        if (event === 'LevelSucceeded') {
-         this.answerClass = 'right';
+         this.answerClass = 'correct';
+         const that = this;
+         setTimeout(function() {
+           that.store.dispatch(new LoadGame(that.game.id));
+         }, 1000);
        } else if (event === 'LevelFailed') {
          this.answerClass = 'wrong';
        }
@@ -80,6 +86,11 @@ export class GameContainerComponent implements OnInit, OnDestroy {
       gameId: this.game.id,
       solution: this.solution,
     }));
+  }
+
+  public reset(): void {
+    this.answerClass = '';
+    this.solution = '';
   }
 
   public onReset(): void {
