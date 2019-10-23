@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Playing;
+using Playing.Events;
 
 namespace Infrastructure.Views
 {

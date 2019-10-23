@@ -9,6 +9,7 @@ using NeverCompletedGame.Commands;
 using NeverCompletedGame.Infrastructure;
 using Newtonsoft.Json;
 using Playing;
+using Playing.Commands;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

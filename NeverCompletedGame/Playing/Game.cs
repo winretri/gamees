@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
+using Playing.Commands;
+using Playing.Events;
 
 namespace Playing
 {
@@ -19,7 +21,7 @@ namespace Playing
 
         public static IEnumerable<Type> DomainCommandTypes
         {
-            get { return Assembly.GetExecutingAssembly().GetTypes().Where(t => t.IsAssignableFrom(typeof(ICommand))); }
+            get { return Assembly.GetExecutingAssembly().GetTypes().Where(t => typeof(ICommand).IsAssignableFrom(t)); }
         }
 
         public static IEnumerable<Type> DomainEventTypes
@@ -69,7 +71,7 @@ namespace Playing
             PublishEvent(e);
             if (CurrentRiddle.Solution.Trim().Equals(guess))
             {
-                IEvent levelSucceeded = new LevelSucceeded(this.Id,this.Level + 1, this.Score + 1*Level);
+                IEvent levelSucceeded = new LevelSucceeded(this.Id, this.Level + 1, this.Score + 1 * Level);
                 levelSucceeded.Handle(this);
                 PublishEvent(levelSucceeded);
             }
@@ -97,238 +99,6 @@ namespace Playing
         {
             uncommitedEvents.Add(e);
         }
-
-        #endregion
-    }
-
-    [Aggregate(typeof(Game))]
-    public class Open : ICommand
-    {
-        #region Public Properties
-
-        public string Id { get; set; }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        public void Handle(Game game)
-        {
-            if (Id == null)
-            {
-                throw new Exception("Missing command parameter 'id'");
-            }
-
-            if (game != null && game.IsOpened)
-            {
-                throw new Exception("Game already open");
-            }
-
-            game.Open(Id);
-        }
-
-        #endregion
-    }
-
-    [Aggregate(typeof(Game))]
-    public class MakeGuess : ICommand
-    {
-        #region Public Properties
-
-        public string Guess { get; set; }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        public void Handle(Game game)
-        {
-            if (Guess == null)
-            {
-                throw new Exception("Missing command parameter 'guess'");
-            }
-
-            if (game != null && !game.IsOpened)
-            {
-                throw new Exception("Game is not open");
-            }
-
-            game.MakeGuess(Guess);
-        }
-
-        #endregion
-    }
-
-    [Aggregate(typeof(Game))]
-    public class Close : ICommand
-    {
-        #region Public Properties
-
-        public string Id { get; set; }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        public void Handle(Game game)
-        {
-        }
-
-        #endregion
-    }
-
-    public class Opened : IEvent
-    {
-        #region Fields
-
-        public int Score = 0;
-
-        private readonly string _id;
-        private readonly int _level;
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        public Opened(int level,
-            string id)
-        {
-            _level = level;
-            _id = id;
-        }
-
-        #endregion
-
-        #region Public Properties
-
-        public string Id => _id;
-
-        public int Level => _level;
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        public void Handle(Game game)
-        {
-            game.IsOpened = true;
-            game.Level = _level;
-            game.Id = _id;
-            game.Score = 0;
-        }
-
-        #endregion
-    }
-
-    public class GuessMade : IEvent
-    {
-        #region Constructors and Destructors
-
-        public GuessMade(string id,
-            string guess)
-        {
-            Guess = guess;
-            Id = id;
-        }
-
-        #endregion
-
-        #region Public Properties
-
-        public string Guess { get; }
-
-        public string Id { get; }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        public void Handle(Game game)
-        {
-            game.Attempts += 1;
-        }
-
-        #endregion
-    }
-
-    public class LevelSucceeded : IEvent
-    {
-        #region Constructors and Destructors
-
-        public LevelSucceeded(string id, int newLevel, int newScore)
-        {
-            this.Id = id;
-            this.NewLevel = newLevel;
-            this.NewScore = newScore;
-        }
-
-        #endregion
-
-        #region Public Properties
-
-        public string Id { get; }
-
-        public int NewLevel { get; }
-
-        public int NewScore { get; }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        public void Handle(Game game)
-        {
-            game.Level = NewLevel;
-            game.Score = NewScore;
-        }
-
-        #endregion
-    }
-
-    public class LevelFailed : IEvent
-    {
-        #region Constructors and Destructors
-
-        public LevelFailed(string id, int newScore)
-        {
-            this.Id = id;
-            this.NewScore = newScore;
-        }
-
-        #endregion
-
-        #region Public Properties
-
-        public string Id { get; }
-
-        public int NewScore { get; }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        public void Handle(Game game)
-        {
-            game.Score = NewScore;
-        }
-
-        #endregion
-    }
-
-    public interface ICommand
-    {
-        #region Public Methods and Operators
-
-        void Handle(Game game);
-
-        #endregion
-    }
-
-    public interface IEvent
-    {
-        #region Public Methods and Operators
-
-        void Handle(Game game);
 
         #endregion
     }

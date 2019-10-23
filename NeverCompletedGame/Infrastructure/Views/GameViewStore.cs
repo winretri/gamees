@@ -5,6 +5,7 @@ using System.Text;
 using Infrastructure.EventEmitter;
 using Infrastructure.Riddles;
 using Playing;
+using Playing.Events;
 
 namespace Infrastructure.Views
 {

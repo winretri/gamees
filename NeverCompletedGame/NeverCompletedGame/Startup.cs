@@ -40,6 +40,7 @@ namespace NeverCompletedGame
             services.AddScoped<IRepository, EventSourcedGamesRepository>();
             services.AddScoped<IViewStore, GameViewStore>();
             services.AddScoped<IEventBus, EventEmitter>();
+            services.AddSignalR();
             services.AddMvc();
             services.AddSpaStaticFiles(configuration =>
             {

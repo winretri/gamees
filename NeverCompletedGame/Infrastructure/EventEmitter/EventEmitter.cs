@@ -4,6 +4,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Text;
 using Playing;
+using Playing.Events;
 
 namespace Infrastructure.EventEmitter
 {

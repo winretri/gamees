@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Windows.Input;
 using Playing;
-using ICommand = Playing.ICommand;
+using ICommand = Playing.Commands.ICommand;
 using Infrastructure.EventEmitter;
+using Playing.Commands;
 
 namespace Infrastructure
 {

@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using NeverCompletedGame.Infrastructure;
 using Playing;
+using Playing.Commands;
 
 namespace Infrastructure
 {
