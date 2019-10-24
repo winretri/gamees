@@ -8,7 +8,7 @@ import { Subject } from 'rxjs';
 
 import * as gameAction from '../../state/';
 import { gameSelectors } from 'src/never-ending-game/state/game/selectors';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, throttleTime, delay } from 'rxjs/operators';
 
 @Component({
   selector: 'ncg-game-container',
@@ -41,6 +41,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
     this.store.select(gameSelectors.getGame)
     .pipe(takeUntil(this.destroy$))
     .subscribe(game => {
+        console.log('get game');
         this.game = game;
         this.reset();
       }
@@ -56,7 +57,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
      );
 
      this.store.select(gameSelectors.getLastGameEvent)
-    .pipe(takeUntil(this.destroy$))
+    .pipe(takeUntil(this.destroy$), delay(1000))
     .subscribe(event => {
         console.log('LAST STORE EVENT: ' + event);
       }
@@ -68,10 +69,6 @@ export class GameContainerComponent implements OnInit, OnDestroy {
        this.event = event;
        if (event === 'LevelSucceeded') {
          this.answerClass = 'correct';
-         const that = this;
-         setTimeout(function() {
-           that.store.dispatch(new LoadGame(that.game.id));
-         }, 1000);
        } else if (event === 'LevelFailed') {
          this.answerClass = 'wrong';
        } else if (event === 'GameCompleted') {
@@ -100,10 +97,12 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   public reset(): void {
     this.answerClass = '';
     this.solution = '';
+    this.completed = false;
+    console.log('reset game container');
   }
 
   public onReset(): void {
-    console.log('reset game container');
+    this.reset();
     this.store.dispatch(new gameAction.ResetGame());
   }
 

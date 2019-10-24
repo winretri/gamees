@@ -51,6 +51,11 @@ function initGameReducer(state: GameState, action: gameAction.GameAction): GameS
         loaded: false,
         loading: false,
       };
+    case gameAction.GameActionTypes.MAKE_GUESS:
+      return {
+        ...state,
+        lastEvent: '',
+      };
     case gameAction.GameActionTypes.EVENT_RECEIVED:
       return {
         ...state,
