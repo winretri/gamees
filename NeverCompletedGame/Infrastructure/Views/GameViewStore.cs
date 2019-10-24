@@ -43,6 +43,7 @@ namespace Infrastructure.Views
             grm.Level = e.Level;
             grm.Question = _riddleRepository.GetRiddle(e.Level).Question;
             grm.Score = e.Score;
+            grm.IsCompleted = false;
             this._context.Games.Add(grm);
             this._context.SaveChanges();
         }
@@ -53,6 +54,13 @@ namespace Infrastructure.Views
             grm.Level = e.NewLevel;
             grm.Score = e.NewScore;
             grm.Question = _riddleRepository.GetRiddle(e.NewLevel).Question;
+            this._context.SaveChanges();
+        }
+
+        private void Handle(GameCompleted e)
+        {
+            GameReadModel grm = this._context.Games.FirstOrDefault(game => game.Id == e.Id);
+            grm.IsCompleted = true;
             this._context.SaveChanges();
         }
 

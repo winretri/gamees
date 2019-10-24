@@ -1,3 +1,4 @@
+import { GameButtonModule } from './../game-button/game-button.module';
 import { FormsModule } from '@angular/forms';
 import { GameContainerComponent } from './game-container.component';
 import { LocalStorageService } from './../../service/local-storage-service.service';
@@ -9,7 +10,8 @@ import { CommonModule } from '@angular/common';
   declarations: [GameContainerComponent],
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    GameButtonModule
   ],
   providers: [
     RxNeverCompletedGameService,

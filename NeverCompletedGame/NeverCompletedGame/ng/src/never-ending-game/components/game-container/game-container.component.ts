@@ -31,10 +31,11 @@ export class GameContainerComponent implements OnInit, OnDestroy {
 
   public answerClass: string;
 
+  public completed = true;
+
   constructor(private store: Store<any>, private eventListener: RxEventListenerService) { }
 
   ngOnInit() {
-    console.log('game container');
     this.store.dispatch(new gameAction.InitGame());
 
     this.store.select(gameSelectors.getGame)
@@ -42,7 +43,6 @@ export class GameContainerComponent implements OnInit, OnDestroy {
     .subscribe(game => {
         this.game = game;
         this.reset();
-        console.log('game set');
       }
      );
 
@@ -67,6 +67,8 @@ export class GameContainerComponent implements OnInit, OnDestroy {
          }, 1000);
        } else if (event === 'LevelFailed') {
          this.answerClass = 'wrong';
+       } else if (event === 'GameCompleted') {
+         this.completed = true;
        }
       }
      );
@@ -96,6 +98,10 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   public onReset(): void {
     console.log('reset game container');
     this.store.dispatch(new gameAction.ResetGame());
+  }
+
+  public onDoReset(event: MouseEvent) {
+    this.onReset();
   }
 
   ngOnDestroy(): void {

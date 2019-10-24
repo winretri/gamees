@@ -34,7 +34,10 @@ namespace Playing
         public Riddle CurrentRiddle => GetRiddle(Level);
 
         public string Id { get; internal set; }
+
         public bool IsOpened { get; internal set; } = false;
+
+        public bool IsCompleted { get; internal set; } = false;
 
         public int Level { get; internal set; }
 
@@ -64,6 +67,26 @@ namespace Playing
             }
         }
 
+        public static int MaxLevel
+        {
+            get
+            {
+                var ass = typeof(Riddle).GetTypeInfo().Assembly;
+                using (Stream resource = ass.GetManifestResourceStream("Playing.riddles.json"))
+                {
+                    using (var streamReader = new StreamReader(resource))
+                    {
+                        using (var jsonTextReader = new JsonTextReader(streamReader))
+                        {
+                            JsonSerializer js = JsonSerializer.Create();
+                            List<Riddle> riddles = js.Deserialize<List<Riddle>>(jsonTextReader);
+                            return riddles.Max(riddle => riddle.Level);
+                        }
+                    }
+                }
+            }
+        }
+
         public void MakeGuess(string guess)
         {
             IEvent e = new GuessMade(this.Id, guess);
@@ -71,9 +94,16 @@ namespace Playing
             PublishEvent(e);
             if (CurrentRiddle.Solution.Trim().Equals(guess))
             {
-                IEvent levelSucceeded = new LevelSucceeded(this.Id, this.Level + 1, this.Score + 1 * Level);
+                bool completed = this.Level == MaxLevel;
+                int nextLevel = completed ? this.Level : this.Level + 1;
+                IEvent levelSucceeded = new LevelSucceeded(this.Id, this.Level, nextLevel, this.Score + 1 * Level);
                 levelSucceeded.Handle(this);
                 PublishEvent(levelSucceeded);
+                if (completed)
+                {
+                    IEvent gameCompleted = new GameCompleted(this.Id);
+                    gameCompleted.Handle(this);
+                }
             }
             else
             {

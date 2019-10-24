@@ -60,5 +60,6 @@ namespace NeverCompletedGame.Events
         {
             _subscription?.Dispose();
         }
+
     }
 }

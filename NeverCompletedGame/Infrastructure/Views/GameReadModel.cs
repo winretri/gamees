@@ -10,6 +10,8 @@ namespace Infrastructure.Views
 
         public string Question { get; internal set; }
 
+        public bool IsCompleted { get; internal set; }
+
         public int Score { get; internal set; }
     }
 }

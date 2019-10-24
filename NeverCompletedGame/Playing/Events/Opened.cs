@@ -34,6 +34,7 @@
 
         public void Handle(Game game)
         {
+            game.IsCompleted = false;
             game.IsOpened = true;
             game.Level = _level;
             game.Id = _id;
