@@ -7,7 +7,7 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 
 import { Observable, of } from 'rxjs';
-import { catchError, concatMap, map, filter, tap, switchMap } from 'rxjs/operators';
+import { catchError, concatMap, map, filter, tap, switchMap, throttle } from 'rxjs/operators';
 
 import * as gameAction from './actions';
 
@@ -119,5 +119,7 @@ export class GameEffects {
       )
     )
   );
+
+
 
 }

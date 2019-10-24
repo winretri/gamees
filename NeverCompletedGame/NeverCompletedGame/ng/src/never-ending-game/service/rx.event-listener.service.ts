@@ -1,3 +1,5 @@
+import { EventReceived } from './../state/game/actions';
+import { Store } from '@ngrx/store';
 import { GameId } from './../model/game.interface';
 import { Subject, Observable } from 'rxjs';
 import { Injectable, Inject } from '@angular/core';
@@ -13,7 +15,7 @@ export class RxEventListenerService {
   private readonly url: Url;
   private hubConnection: signalR.HubConnection;
 
-  constructor(@Inject(NCG_BASE_URL) baseUrl: string) {
+  constructor(@Inject(NCG_BASE_URL) baseUrl: string, private store: Store<any>) {
     this.url = new Url([baseUrl, 'events'], {});
     this.message$ = new Subject<string>();
     this.connectionEstablished$ = new Subject<boolean>();
@@ -52,8 +54,11 @@ export class RxEventListenerService {
   }
 
   private addEventListener = () => {
-    this.hubConnection.on('ReceiveEvent', (data: string) => {
+    this.hubConnection.on('ReceiveEvent', (data: any) => {
       console.log(data);
+      this.store.dispatch(new EventReceived({
+        type: data,
+      }));
       this.message$.next(data);
     });
   }

@@ -13,6 +13,11 @@ const getGameId = createSelector(
   (state) => state.gameId
 );
 
+const getLastGameEvent = createSelector(
+  getGameFeatureState,
+  (state) => state.lastEvent
+);
+
 const getGame = createSelector(
   getGameFeatureState,
   getGameId,
@@ -24,6 +29,7 @@ const getGame = createSelector(
 export const gameSelectors = {
   getGameId,
   getGame,
-  getGameLoaded
+  getGameLoaded,
+  getLastGameEvent
 };
 

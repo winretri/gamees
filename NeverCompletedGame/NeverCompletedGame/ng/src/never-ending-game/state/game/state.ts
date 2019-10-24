@@ -1,6 +1,7 @@
+
 import { GameId } from './../../model/game.interface';
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
-import { IGame } from '../../model';
+import { IGame,  } from '../../model';
 
 export interface GameState extends EntityState<IGame> {
   loaded: boolean;
@@ -9,6 +10,7 @@ export interface GameState extends EntityState<IGame> {
   opening: boolean;
   gameId: GameId;
   error: string;
+  lastEvent: string;
 }
 
 export const gameAdapter: EntityAdapter<IGame> = createEntityAdapter<IGame>();
@@ -21,6 +23,7 @@ export const defaultGame: GameState = {
   opened: false,
   opening: false,
   gameId: null,
-  error: ''
+  error: '',
+  lastEvent: null,
 };
 export const initialGameState = gameAdapter.getInitialState(defaultGame);

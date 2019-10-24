@@ -51,6 +51,11 @@ function initGameReducer(state: GameState, action: gameAction.GameAction): GameS
         loaded: false,
         loading: false,
       };
+    case gameAction.GameActionTypes.EVENT_RECEIVED:
+      return {
+        ...state,
+        lastEvent: action.payload.type,
+      };
     default:
       return state;
   }

@@ -31,7 +31,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
 
   public answerClass: string;
 
-  public completed = true;
+  public completed = false;
 
   constructor(private store: Store<any>, private eventListener: RxEventListenerService) { }
 
@@ -52,6 +52,13 @@ export class GameContainerComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.destroy$))
     .subscribe(gameLoaded => {
         this.gameLoaded = gameLoaded;
+      }
+     );
+
+     this.store.select(gameSelectors.getLastGameEvent)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(event => {
+        console.log('LAST STORE EVENT: ' + event);
       }
      );
 

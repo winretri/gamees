@@ -31,6 +31,9 @@ namespace NeverCompletedGame.Events
                 case LevelFailed failed:
                     Handle(failed);
                     break;
+                case GameCompleted completed:
+                    Handle(completed);
+                    break;
             }
         }
 
@@ -49,6 +52,12 @@ namespace NeverCompletedGame.Events
         {
             string aggregateId = failed.Id;
             Handle(aggregateId, failed);
+        }
+
+        private void Handle(GameCompleted completed)
+        {
+            string aggregateId = completed.Id;
+            Handle(aggregateId, completed);
         }
 
         private void Handle(string aggregateId, IEvent @event)

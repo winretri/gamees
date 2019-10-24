@@ -103,6 +103,7 @@ namespace Playing
                 {
                     IEvent gameCompleted = new GameCompleted(this.Id);
                     gameCompleted.Handle(this);
+                    PublishEvent(gameCompleted);
                 }
             }
             else
