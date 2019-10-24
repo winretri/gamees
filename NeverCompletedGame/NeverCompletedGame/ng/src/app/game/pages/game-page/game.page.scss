@@ -23,21 +23,12 @@
       width: 50%;
       box-sizing: border-box;
     }
-  }
-  .sub-header {
-    width: 100%;
-    height: #{$sub-header-height}px;
-    position: absolute;
-    top: #{$top-height}px;
-    left: 0;
-    border-bottom: 1px solid #aaaaaa;
 
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    justify-items: center;
-    align-items: center;
+    .top-menu {
+      position: absolute;
+      top: 30px;
+      right: 20px;
+    }
   }
   main {
     position: absolute;
