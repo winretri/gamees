@@ -16,8 +16,14 @@ namespace Infrastructure.Views
             modelBuilder
                 .Entity<GameReadModel>()
                 .HasKey(grm => grm.Id);
+
+            modelBuilder
+                .Entity<GuessReadModel>()
+                .HasKey(grm => grm.Id);
         }
 
         public DbSet<GameReadModel> Games { get; set; }
+
+        public DbSet<GuessReadModel> Guesses { get; set; }
     }
 }

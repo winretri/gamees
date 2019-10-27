@@ -1,3 +1,4 @@
+import { environment } from './../environments/environment';
 import { GameReducers } from './../never-ending-game/state/index.reducer';
 import { AppRoutingModule } from './app-routing.module';
 import { NeverEndingGameModule } from './../never-ending-game/never-ending-game.module';
@@ -13,6 +14,7 @@ import { GamePageModule } from './game/pages/game-page/game.page.module';
 import { StoreModule } from '@ngrx/store';
 import { GameEffects } from 'src/never-ending-game/state';
 import { EffectsModule } from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 const effects = [
   GameEffects,
@@ -31,6 +33,10 @@ const effects = [
     AppRoutingModule,
     EffectsModule.forRoot(effects),
     StoreModule.forRoot(GameReducers),
+    StoreDevtoolsModule.instrument({
+      maxAge: 50,
+      logOnly: environment.production
+    }),
   ],
   providers: [
     RxNeverCompletedGameService,

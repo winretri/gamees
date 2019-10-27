@@ -42,7 +42,6 @@ export class RxNeverCompletedGameService {
     const payload = { id : aggregateId };
     const pls: string = JSON.stringify(payload);
     const body = { name, domain, aggregateType, aggregateId, payload : pls };
-    console.log(body);
     return this.http.post(this.url.serialize(), body).pipe(map(() => aggregateId));
   }
 
@@ -54,7 +53,6 @@ export class RxNeverCompletedGameService {
     const payload = { id : aggregateId, guess: guess };
     const pls: string = JSON.stringify(payload);
     const body = { name, domain, aggregateType, aggregateId, payload : pls };
-    console.log(body);
     return this.http.post(this.url.serialize(), body).pipe(map(() => aggregateId));
   }
 

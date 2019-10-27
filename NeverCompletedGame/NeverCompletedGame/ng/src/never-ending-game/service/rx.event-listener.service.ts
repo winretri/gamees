@@ -19,30 +19,41 @@ export class RxEventListenerService {
     this.url = new Url([baseUrl, 'events'], {});
     this.message$ = new Subject<string>();
     this.connectionEstablished$ = new Subject<boolean>();
-   }
-
-  public startConnection = (gameId: GameId) => {
     this.hubConnection = new signalR.HubConnectionBuilder()
                             .withUrl(this.url.serialize())
                             .build();
+   }
 
-    this.hubConnection
-      .start()
-      .then(() => {
-        this.listenForGameEvents(gameId);
+  public startConnection = (gameId: GameId) => {
+
+
+    if (this.hubConnection.state === signalR.HubConnectionState.Disconnected) {
+      this.hubConnection
+      .start().then(() => {
+        console.log('RECONECTED TO GAME ' + gameId);
         this.addEventListener();
+        this.listenForGameEvents(gameId);
         this.connectionEstablished$.next(true);
       })
       .catch(err => {
         console.log('Error while starting connection: ' + err);
         this.connectionEstablished$.next(false);
       });
+    } else {
+      console.log('LISTEN TO GAME ' + gameId);
+      this.listenForGameEvents(gameId);
+      this.connectionEstablished$.next(true);
+    }
 
     return this.connectionEstablished$.asObservable();
   }
 
   public listenForGameEvents(gameId: GameId) {
     this.hubConnection.send('JoinGroup', gameId);
+  }
+
+  public stopListeningForGameEvents(gameId: GameId) {
+    this.hubConnection.send('LeaveGroup', gameId);
   }
 
   public disconnect() {

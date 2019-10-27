@@ -30,7 +30,6 @@ function initGameReducer(state: GameState, action: gameAction.GameAction): GameS
           loading: false,
           opened: false,
           opening: true,
-          gameId: action.payload,
           error: ''
         };
     case gameAction.GameActionTypes.LOAD_GAME:
@@ -61,6 +60,8 @@ function initGameReducer(state: GameState, action: gameAction.GameAction): GameS
         ...state,
         lastEvent: action.payload.type,
       };
+    case gameAction.GameActionTypes.RESET_GAME:
+      return initialGameState;
     default:
       return state;
   }

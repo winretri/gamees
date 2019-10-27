@@ -9,4 +9,6 @@ export interface IGame {
   readonly question: string;
 
   readonly score: number;
+
+  readonly completed: boolean;
 }

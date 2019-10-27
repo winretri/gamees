@@ -41,9 +41,9 @@ export class GameContainerComponent implements OnInit, OnDestroy {
     this.store.select(gameSelectors.getGame)
     .pipe(takeUntil(this.destroy$))
     .subscribe(game => {
-        console.log('get game');
-        this.game = game;
         this.reset();
+        this.game = game;
+        this.completed = game != null ? this.game.completed : false;
       }
      );
 
@@ -67,12 +67,14 @@ export class GameContainerComponent implements OnInit, OnDestroy {
      .pipe(takeUntil(this.destroy$))
      .subscribe(event => {
        this.event = event;
+       console.log('STREAM EVENT: ' + event);
        if (event === 'LevelSucceeded') {
          this.answerClass = 'correct';
+         this.store.dispatch(new LoadGame(this.game.id));
        } else if (event === 'LevelFailed') {
          this.answerClass = 'wrong';
        } else if (event === 'GameCompleted') {
-         this.completed = true;
+         this.eventListener.stopListeningForGameEvents(this.game.id);
        }
       }
      );
@@ -97,8 +99,6 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   public reset(): void {
     this.answerClass = '';
     this.solution = '';
-    this.completed = false;
-    console.log('reset game container');
   }
 
   public onReset(): void {
@@ -108,6 +108,10 @@ export class GameContainerComponent implements OnInit, OnDestroy {
 
   public onDoReset(event: MouseEvent) {
     this.onReset();
+  }
+
+  public onReload(event: MouseEvent) {
+    this.store.dispatch(new gameAction.LoadGame(this.game.id));
   }
 
   ngOnDestroy(): void {

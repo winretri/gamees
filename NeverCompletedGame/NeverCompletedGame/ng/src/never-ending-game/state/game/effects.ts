@@ -7,7 +7,7 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 
 import { Observable, of } from 'rxjs';
-import { catchError, concatMap, map, filter, tap, switchMap, throttle } from 'rxjs/operators';
+import { catchError, concatMap, map } from 'rxjs/operators';
 
 import * as gameAction from './actions';
 
@@ -30,13 +30,14 @@ export class GameEffects {
     ofType<gameAction.OpenGame>(
       gameAction.GameActionTypes.OPEN_GAME
     ),
-    concatMap((action: gameAction.OpenGame) =>
-      this.gameService.openGame().pipe(
+    concatMap((action: gameAction.OpenGame) => {
+      console.log('OPEN GAME');
+      return this.gameService.openGame().pipe(
         map((gameId: GameId) => new gameAction.OpenGameSuccess(gameId)),
         catchError(err => {
           return of(new gameAction.OpenGameFail(err));
         })
-      )
+      );}
     )
   );
 
@@ -46,6 +47,7 @@ export class GameEffects {
       gameAction.GameActionTypes.OPEN_GAME_SUCCESS
     ),
     concatMap((action: gameAction.OpenGameSuccess) => {
+      console.log('OPEN GAME SUCCESS');
        this.localStorage.storeOpenGameId(action.payload);
        return of(new gameAction.LoadGame(action.payload));
     })
@@ -57,7 +59,7 @@ export class GameEffects {
       gameAction.GameActionTypes.INIT_GAME
     ),
     concatMap((action: gameAction.InitGame) => {
-      console.log('init action');
+     console.log('INIT GAME');
      if (this.localStorage.containsOpenGameId) {
        return of(new gameAction.LoadGame(this.localStorage.getOpenGameId()));
      } else {
@@ -72,6 +74,7 @@ export class GameEffects {
       gameAction.GameActionTypes.RESET_GAME
     ),
     concatMap((action: gameAction.ResetGame) => {
+      console.log('RESET GAME');
       this.localStorage.resetOpenGame();
       return of(new gameAction.InitGame());
     })
@@ -82,13 +85,20 @@ export class GameEffects {
     ofType<gameAction.LoadGame>(
       gameAction.GameActionTypes.LOAD_GAME
     ),
-    concatMap((action: gameAction.LoadGame) =>
-      this.gameService.fetchGame(action.payload).pipe(
-        map((game: IGame) => new gameAction.LoadGameSuccess(game)),
+    concatMap((action: gameAction.LoadGame) => {
+      console.log('LOAD GAME');
+      return this.gameService.fetchGame(action.payload).pipe(
+        map((game: IGame) => {
+          console.log('RETURN LOAD GAME SUCCESS');
+          return new gameAction.LoadGameSuccess(game);
+        }
+          ),
         catchError(err => {
+          console.log('LOAD GAME FAIL');
           return of(new gameAction.LoadGameFail(err));
         })
-      )
+      );
+      }
     )
   );
 
@@ -113,10 +123,12 @@ export class GameEffects {
     ofType<gameAction.LoadGameSuccess>(
       gameAction.GameActionTypes.LOAD_GAME_SUCCESS
     ),
-    concatMap((action: gameAction.LoadGameSuccess) =>
-      this.eventListener.startConnection(action.payload.id).pipe(
-        map((b) => b ? {type: 'success'} : {type: 'fail'})
-      )
+    concatMap((action: gameAction.LoadGameSuccess) => {
+      console.log('LOAD GAME SUCCESS');
+      return this.eventListener.startConnection(action.payload.id).pipe(
+        map((b) => b ? {type: 'success ' + action.payload.id} : {type: 'fail'})
+      );
+    }
     )
   );
 

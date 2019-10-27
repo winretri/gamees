@@ -18,7 +18,6 @@ export class GamePage implements OnInit {
   }
 
   public onDoReset(event: MouseEvent) {
-    console.log(this.ncgContainer);
     this.ncgContainer.onReset();
   }
 

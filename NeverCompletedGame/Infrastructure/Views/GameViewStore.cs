@@ -5,6 +5,7 @@ using System.Text;
 using Infrastructure.EventEmitter;
 using Infrastructure.Riddles;
 using Playing;
+using Playing.Commands;
 using Playing.Events;
 
 namespace Infrastructure.Views
@@ -33,6 +34,9 @@ namespace Infrastructure.Views
                 case LevelFailed failed:
                     Handle(failed);
                     break;
+                case GameCompleted completed:
+                    Handle(completed);
+                    break;
             }
         }
 
@@ -57,6 +61,12 @@ namespace Infrastructure.Views
             this._context.SaveChanges();
         }
 
+        //private void Handle(MakeGuess e)
+        //{
+
+        //    GuessReadModel guessRM = new GuessReadModel() {GameId = e.Id};
+        //}
+
         private void Handle(GameCompleted e)
         {
             GameReadModel grm = this._context.Games.FirstOrDefault(game => game.Id == e.Id);
@@ -76,7 +86,7 @@ namespace Infrastructure.Views
             GameReadModel grm = _context.Games.FirstOrDefault( game => game.Id == id);
             if (grm != null)
             {
-                GameView gameView = new GameView() {Id = grm.Id, Level = grm.Level, Question = grm.Question, Score = grm.Score};
+                GameView gameView = new GameView() {Id = grm.Id, Level = grm.Level, Question = grm.Question, Score = grm.Score, Completed = grm.IsCompleted };
                 return gameView;
             }
 
