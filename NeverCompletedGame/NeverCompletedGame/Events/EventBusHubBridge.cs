@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Infrastructure.EventEmitter;
 using Infrastructure.Events;
@@ -27,7 +28,8 @@ namespace NeverCompletedGame.Events
 
         private void Handle(string aggregateId, IEventSourcingEvent @event)
         {
-            _hub.Clients.Group(aggregateId).SendAsync("ReceiveEvent", @event);
+            string serializedEvent = JsonSerializer.Serialize(@event, typeof(IEventSourcingEvent));
+            _hub.Clients.Group(aggregateId).SendAsync("ReceiveEvent", serializedEvent);
         }
 
         public void Dispose()
