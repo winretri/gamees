@@ -67,9 +67,7 @@ export class RxEventListenerService {
   private addEventListener = () => {
     this.hubConnection.on('ReceiveEvent', (data: any) => {
       console.log(data);
-      this.store.dispatch(new EventReceived({
-        type: data,
-      }));
+      this.store.dispatch(new EventReceived(data));
       this.message$.next(data);
     });
   }

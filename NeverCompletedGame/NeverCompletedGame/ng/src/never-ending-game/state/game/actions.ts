@@ -1,4 +1,4 @@
-import { MakeGuessEvent, EventReceivedEvent } from './../../model/game.event.interface';
+import { MakeGuessEvent, EventReceivedEvent, GameEvent } from './../../model/game.event.interface';
 import { Action } from '@ngrx/store';
 import { GameId, IGame } from '../../model';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -92,7 +92,7 @@ export class MakeGuessFail implements Action {
 export class EventReceived implements Action {
   readonly type = GameActionTypes.EVENT_RECEIVED;
 
-  constructor(public payload: EventReceivedEvent) {
+  constructor(public payload: GameEvent) {
   }
 }
 

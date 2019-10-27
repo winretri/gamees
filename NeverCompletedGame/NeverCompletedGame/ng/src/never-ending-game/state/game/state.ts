@@ -1,3 +1,4 @@
+import { GameEvent } from './../../model/game.event.interface';
 
 import { GameId } from './../../model/game.interface';
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
@@ -10,7 +11,7 @@ export interface GameState extends EntityState<IGame> {
   opening: boolean;
   gameId: GameId;
   error: string;
-  lastEvent: string;
+  lastEvent: GameEvent;
 }
 
 export const gameAdapter: EntityAdapter<IGame> = createEntityAdapter<IGame>();

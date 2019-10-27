@@ -53,12 +53,12 @@ function initGameReducer(state: GameState, action: gameAction.GameAction): GameS
     case gameAction.GameActionTypes.MAKE_GUESS:
       return {
         ...state,
-        lastEvent: '',
+        lastEvent: null,
       };
     case gameAction.GameActionTypes.EVENT_RECEIVED:
       return {
         ...state,
-        lastEvent: action.payload.type,
+        lastEvent: action.payload,
       };
     case gameAction.GameActionTypes.RESET_GAME:
       return initialGameState;

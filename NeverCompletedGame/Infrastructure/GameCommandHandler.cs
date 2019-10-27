@@ -20,24 +20,24 @@ namespace Infrastructure
 
         public void Handle(string aggregateId, Open command)
         {
-            Game newGame = repo.Restore(aggregateId) ?? new Game();
-            command.Handle(newGame);
+            Aggregate newGame = repo.Restore(aggregateId) ?? new Aggregate(new Game());
+            command.Handle(newGame.Game);
             repo.Save(newGame);
             eventBus.Emit(newGame.UncomittedEvents);
         }
 
         public void Handle(string aggregateId, MakeGuess command)
         {
-            Game newGame = repo.Restore(aggregateId) ?? new Game();
-            command.Handle(newGame);
+            Aggregate newGame = repo.Restore(aggregateId) ?? new Aggregate(new Game());
+            command.Handle(newGame.Game);
             repo.Save(newGame);
             eventBus.Emit(newGame.UncomittedEvents);
         }
 
         public void Handle(string aggregateId, Close command)
         {
-            Game newGame = repo.Restore(aggregateId) ?? new Game();
-            command.Handle(newGame);
+            Aggregate newGame = repo.Restore(aggregateId) ?? new Aggregate(new Game());
+            command.Handle(newGame.Game);
             repo.Save(newGame);
             eventBus.Emit(newGame.UncomittedEvents);
         }

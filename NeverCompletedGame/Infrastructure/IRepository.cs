@@ -7,8 +7,8 @@ namespace Infrastructure
 {
     public interface IRepository
     {
-        void Save(Game game);
+        void Save(Aggregate game);
 
-        Game Restore(string id);
+        Aggregate Restore(string id);
     }
 }

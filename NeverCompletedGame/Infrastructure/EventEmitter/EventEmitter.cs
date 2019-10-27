@@ -3,24 +3,23 @@ using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Text;
-using Playing;
-using Playing.Events;
+using Infrastructure.Events;
 
 namespace Infrastructure.EventEmitter
 {
     public class EventEmitter : IEventBus
     {
-        public event EventHandler<IEvent> On;
+        public event EventHandler<IEventSourcingEvent> On;
 
         public EventEmitter()
         {
-            Events = Observable.FromEventPattern<IEvent>(ev => On += ev,
+            Events = Observable.FromEventPattern<IEventSourcingEvent>(ev => On += ev,
                 ev => On -= ev);
         }
 
-        public IObservable<EventPattern<IEvent>> Events { get; }
+        public IObservable<EventPattern<IEventSourcingEvent>> Events { get; }
 
-        public void Emit(IEnumerable<IEvent> @events)
+        public void Emit(IEnumerable<IEventSourcingEvent> @events)
         {
             foreach (var @event in @events)
             {
@@ -28,7 +27,7 @@ namespace Infrastructure.EventEmitter
             }
         }
 
-        public void Emit(IEvent e)
+        public void Emit(IEventSourcingEvent e)
         {
             On?.Invoke( this, e);
         }

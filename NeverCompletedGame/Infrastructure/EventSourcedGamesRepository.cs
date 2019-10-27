@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Infrastructure.Events;
 using Playing;
 using Newtonsoft.Json;
 using Playing.Events;
@@ -17,29 +18,13 @@ namespace Infrastructure
             this.context = context;
         }
 
-        public void Save(Game game)
+        public void Save(Aggregate game)
         {
-            var now = DateTime.UtcNow;
-            List<EventStoreEvent> esEvents = new List<EventStoreEvent>();
-
-            foreach (var item in game.UncomittedEvents.Select((value, i) =>  new { i, value }))
-            {
-                int sequence = item.i;
-                IEvent e = item.value;
-                EventStoreEvent ese = new EventStoreEvent();
-                ese.AggregateId = game.Id;
-                ese.Id = Guid.NewGuid().ToString();
-                ese.DomainEventName = e.GetType().Name;
-                ese.Time = now;
-                ese.Sequence = sequence;
-                ese.EventContainer = JsonConvert.SerializeObject(e);
-                esEvents.Add(ese);
-            }
-            this.context.Events.AddRange(esEvents);
+            this.context.Events.AddRange(game.UncomittedEvents);
             this.context.SaveChanges();
         }
 
-        public Game Restore(string gameId)
+        public Aggregate Restore(string gameId)
         {
             List<EventStoreEvent> events = this.context.Events.Where(e => e.AggregateId == gameId).OrderBy(e => e.Time).ThenBy(e => e.Sequence).ToList();
             Game g = new Game();
@@ -49,7 +34,7 @@ namespace Infrastructure
                 domainEvent.Handle(g);
             }
 
-            return g;
+            return new Aggregate(g);;
         }
 
         public IEvent GetDomainEventForEventStoreEvent(EventStoreEvent e)

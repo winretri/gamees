@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Playing;
-using Playing.Events;
+﻿using Infrastructure.Events;
 
 namespace Infrastructure.Views
 {
     public interface IViewStore
     {
-        void Handle(IEvent e);
+        void Handle(IEventSourcingEvent e);
 
         GameView Get(string id);
     }

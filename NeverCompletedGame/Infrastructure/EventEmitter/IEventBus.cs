@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reactive;
-using System.Text;
-using Playing;
-using Playing.Events;
+using Infrastructure.Events;
 
 namespace Infrastructure.EventEmitter
 {
     public interface IEventBus
     {
-        IObservable<EventPattern<IEvent>> Events { get; }
+        IObservable<EventPattern<IEventSourcingEvent>> Events { get; }
 
-        void Emit(IEnumerable<IEvent> @events);
+        void Emit(IEnumerable<IEventSourcingEvent> @events);
 
-        void Emit(IEvent @event);
+        void Emit(IEventSourcingEvent @event);
     }
 }

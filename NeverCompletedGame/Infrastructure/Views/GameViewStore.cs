@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Infrastructure.EventEmitter;
+using Infrastructure.Events;
 using Infrastructure.Riddles;
-using Playing;
-using Playing.Commands;
 using Playing.Events;
 
 namespace Infrastructure.Views
@@ -22,9 +21,9 @@ namespace Infrastructure.Views
             _riddleRepository = riddleRepository;
             _subscription = eventBus.Events.Subscribe(args => Handle(args.EventArgs));
         }
-        public void Handle(IEvent e)
+        public void Handle(IEventSourcingEvent e)
         {
-            switch (e)
+            switch (e.DomainEvent)
             {
                 case Opened opened: Handle(opened);
                     break;

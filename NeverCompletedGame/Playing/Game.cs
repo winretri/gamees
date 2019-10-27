@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
 using Playing.Commands;
@@ -12,8 +14,15 @@ namespace Playing
     public class Game
     {
         #region Fields
+        
+        public event EventHandler<IEvent> On;
 
-        private List<IEvent> uncommitedEvents = new List<IEvent>();
+        public Game() {
+            Events = Observable.FromEventPattern<IEvent>(ev => On += ev,
+                ev => On -= ev);
+        }
+
+        public IObservable<EventPattern<IEvent>> Events { get; }
 
         #endregion
 
@@ -43,7 +52,6 @@ namespace Playing
 
         public int Score { get; internal set; }
 
-        public IEnumerable<IEvent> UncomittedEvents => new List<IEvent>(uncommitedEvents);
 
         #endregion
 
@@ -128,7 +136,7 @@ namespace Playing
 
         internal void PublishEvent(IEvent e)
         {
-            uncommitedEvents.Add(e);
+            On?.Invoke(this,e);
         }
 
         #endregion

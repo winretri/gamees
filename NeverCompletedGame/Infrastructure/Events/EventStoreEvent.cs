@@ -1,9 +1,11 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Playing.Events;
 
-namespace Infrastructure
+namespace Infrastructure.Events
 {
-    public class EventStoreEvent
+    public class EventStoreEvent : IEventSourcingEvent
     {
         #region Public Properties
 
@@ -12,6 +14,9 @@ namespace Infrastructure
         public string DomainEventName { get; set; }
 
         public virtual string EventContainer { get; set; }
+
+        [NotMapped]
+        public IEvent DomainEvent { get; internal set; }
 
         public int EventContainerVersion { get; internal set; }
 
