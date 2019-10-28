@@ -1,3 +1,4 @@
+import { GameEvent } from './../model/game.event.interface';
 import { EventReceived } from './../state/game/actions';
 import { Store } from '@ngrx/store';
 import { GameId } from './../model/game.interface';
@@ -10,14 +11,14 @@ import { Url } from '../util/url';
 @Injectable()
 export class RxEventListenerService {
 
-  private message$: Subject<string>;
+  private message$: Subject<GameEvent>;
   private connectionEstablished$: Subject<boolean>;
   private readonly url: Url;
   private hubConnection: signalR.HubConnection;
 
   constructor(@Inject(NCG_BASE_URL) baseUrl: string, private store: Store<any>) {
     this.url = new Url([baseUrl, 'events'], {});
-    this.message$ = new Subject<string>();
+    this.message$ = new Subject<GameEvent>();
     this.connectionEstablished$ = new Subject<boolean>();
     this.hubConnection = new signalR.HubConnectionBuilder()
                             .withUrl(this.url.serialize())
@@ -60,12 +61,13 @@ export class RxEventListenerService {
     this.hubConnection.stop();
   }
 
-  public getMessage(): Observable<string> {
+  public getMessage(): Observable<GameEvent> {
     return this.message$.asObservable();
   }
 
   private addEventListener = () => {
     this.hubConnection.on('ReceiveEvent', (data: any) => {
+      data = JSON.parse(data);
       console.log(data);
       this.store.dispatch(new EventReceived(data));
       this.message$.next(data);

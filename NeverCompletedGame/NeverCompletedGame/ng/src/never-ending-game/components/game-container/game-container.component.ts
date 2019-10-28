@@ -1,3 +1,4 @@
+import { GameEvent } from './../../model/game.event.interface';
 import { RxEventListenerService } from './../../service/rx.event-listener.service';
 import { MakeGuess, LoadGame } from './../../state/game/actions';
 import { IGame } from './../../model/game.interface';
@@ -27,7 +28,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
 
   public solution: string;
 
-  public event: string;
+  public event: GameEvent;
 
   public answerClass: string;
 
@@ -68,12 +69,12 @@ export class GameContainerComponent implements OnInit, OnDestroy {
      .subscribe(event => {
        this.event = event;
        console.log('STREAM EVENT: ' + event);
-       if (event === 'LevelSucceeded') {
+       if (event.DomainEventName === 'LevelSucceeded') {
          this.answerClass = 'correct';
          this.store.dispatch(new LoadGame(this.game.id));
-       } else if (event === 'LevelFailed') {
+       } else if (event.DomainEventName === 'LevelFailed') {
          this.answerClass = 'wrong';
-       } else if (event === 'GameCompleted') {
+       } else if (event.DomainEventName === 'GameCompleted') {
          this.eventListener.stopListeningForGameEvents(this.game.id);
        }
       }
