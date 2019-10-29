@@ -16,7 +16,11 @@ namespace NeverCompletedGame.Events
 
         public Task LeaveGroup(string group)
         {
-            return Groups.RemoveFromGroupAsync(Context.ConnectionId, group);
+            if (group != null)
+            {
+                return Groups.RemoveFromGroupAsync(Context.ConnectionId, group);
+            }
+            return Task.CompletedTask;
         }
 
     }

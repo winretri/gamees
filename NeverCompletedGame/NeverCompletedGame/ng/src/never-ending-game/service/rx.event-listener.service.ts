@@ -1,8 +1,9 @@
+import { map, catchError, filter, concatMap } from 'rxjs/operators';
 import { GameEvent } from './../model/game.event.interface';
 import { EventReceived } from './../state/game/actions';
 import { Store } from '@ngrx/store';
 import { GameId } from './../model/game.interface';
-import { Subject, Observable } from 'rxjs';
+import { Subject, Observable, of, from, merge } from 'rxjs';
 import { Injectable, Inject } from '@angular/core';
 import * as signalR from '@aspnet/signalr';
 import { NCG_BASE_URL } from '../util/token';
@@ -12,41 +13,55 @@ import { Url } from '../util/url';
 export class RxEventListenerService {
 
   private message$: Subject<GameEvent>;
-  private connectionEstablished$: Subject<boolean>;
   private readonly url: Url;
   private hubConnection: signalR.HubConnection;
 
   constructor(@Inject(NCG_BASE_URL) baseUrl: string, private store: Store<any>) {
     this.url = new Url([baseUrl, 'events'], {});
     this.message$ = new Subject<GameEvent>();
-    this.connectionEstablished$ = new Subject<boolean>();
     this.hubConnection = new signalR.HubConnectionBuilder()
                             .withUrl(this.url.serialize())
                             .build();
    }
 
-  public startConnection = (gameId: GameId) => {
+  public startConnection(gameId: GameId): Observable<boolean> {
+    const gameIdObs = of (gameId);
 
-
-    if (this.hubConnection.state === signalR.HubConnectionState.Disconnected) {
-      this.hubConnection
-      .start().then(() => {
-        console.log('RECONECTED TO GAME ' + gameId);
+    const connectionStart = () => from(this.hubConnection.start()).pipe(
+      map(() => {
         this.addEventListener();
-        this.listenForGameEvents(gameId);
-        this.connectionEstablished$.next(true);
-      })
-      .catch(err => {
-        console.log('Error while starting connection: ' + err);
-        this.connectionEstablished$.next(false);
-      });
-    } else {
-      console.log('LISTEN TO GAME ' + gameId);
-      this.listenForGameEvents(gameId);
-      this.connectionEstablished$.next(true);
-    }
+        return true;
+      }),
+      catchError(err => {
+        console.log(err);
+        return of(false);
+      }));
 
-    return this.connectionEstablished$.asObservable();
+    const connectionEstablished$ = of(this.hubConnection.state === signalR.HubConnectionState.Disconnected);
+
+
+    const listenForGame = gameIdObs.pipe(concatMap(gId => {
+      this.listenForGameEvents(gId);
+      return of(true);
+    }));
+
+    const v1 = connectionEstablished$.pipe(
+      filter(disconnected => disconnected),
+      concatMap(val => {
+        return connectionStart();
+      }),
+      filter(connected => connected),
+      concatMap(connected => listenForGame)
+    );
+
+    const v2 = connectionEstablished$.pipe(
+        filter(disconnected => !disconnected),
+        concatMap(val => {
+          return listenForGame;
+        })
+    );
+
+    return merge(v1, v2);
   }
 
   public listenForGameEvents(gameId: GameId) {
@@ -54,11 +69,12 @@ export class RxEventListenerService {
   }
 
   public stopListeningForGameEvents(gameId: GameId) {
+    console.log('STOP LISTENING' + gameId);
     this.hubConnection.send('LeaveGroup', gameId);
   }
 
   public disconnect() {
-    this.hubConnection.stop();
+    return this.hubConnection.stop();
   }
 
   public getMessage(): Observable<GameEvent> {

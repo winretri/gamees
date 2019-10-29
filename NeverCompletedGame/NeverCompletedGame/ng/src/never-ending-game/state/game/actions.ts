@@ -99,7 +99,7 @@ export class EventReceived implements Action {
 export class ResetGame implements Action {
   readonly type = GameActionTypes.RESET_GAME;
 
-  constructor() {
+  constructor(public payload: GameId) {
   }
 }
 

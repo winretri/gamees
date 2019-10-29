@@ -7,7 +7,7 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 
 import { Observable, of } from 'rxjs';
-import { catchError, concatMap, map } from 'rxjs/operators';
+import { catchError, concatMap, map, tap } from 'rxjs/operators';
 
 import * as gameAction from './actions';
 
@@ -76,6 +76,7 @@ export class GameEffects {
     concatMap((action: gameAction.ResetGame) => {
       console.log('RESET GAME');
       this.localStorage.resetOpenGame();
+      this.eventListener.stopListeningForGameEvents(action.payload);
       return of(new gameAction.InitGame());
     })
   );
@@ -123,14 +124,23 @@ export class GameEffects {
     ofType<gameAction.LoadGameSuccess>(
       gameAction.GameActionTypes.LOAD_GAME_SUCCESS
     ),
+    tap(_ => console.log('aaaa')),
     concatMap((action: gameAction.LoadGameSuccess) => {
       console.log('LOAD GAME SUCCESS');
       return this.eventListener.startConnection(action.payload.id).pipe(
-        map((b) => b ? {type: 'success ' + action.payload.id} : {type: 'fail'})
+        map((b) => {
+          return ({type: 'success ' + action.payload.id});
+        }),
+        catchError(err => {
+          console.log('ERROR' + err);
+          return of({type: 'ecx'});
+      })
       );
     }
     )
   );
+
+
 
 
 

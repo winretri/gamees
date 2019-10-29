@@ -104,7 +104,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
 
   public onReset(): void {
     this.reset();
-    this.store.dispatch(new gameAction.ResetGame());
+    this.store.dispatch(new gameAction.ResetGame(this.game.id));
   }
 
   public onDoReset(event: MouseEvent) {
