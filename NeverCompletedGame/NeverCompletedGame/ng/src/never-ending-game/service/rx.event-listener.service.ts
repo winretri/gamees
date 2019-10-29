@@ -1,9 +1,9 @@
-import { map, catchError, filter, concatMap } from 'rxjs/operators';
+import { map, catchError, filter, concatMap, mergeMap, switchMap } from 'rxjs/operators';
 import { GameEvent } from './../model/game.event.interface';
 import { EventReceived } from './../state/game/actions';
 import { Store } from '@ngrx/store';
 import { GameId } from './../model/game.interface';
-import { Subject, Observable, of, from, merge } from 'rxjs';
+import { Subject, Observable, of, from, merge, iif } from 'rxjs';
 import { Injectable, Inject } from '@angular/core';
 import * as signalR from '@aspnet/signalr';
 import { NCG_BASE_URL } from '../util/token';
@@ -27,7 +27,9 @@ export class RxEventListenerService {
   public startConnection(gameId: GameId): Observable<boolean> {
     const gameIdObs = of (gameId);
 
-    const connectionStart = () => from(this.hubConnection.start()).pipe(
+    const connectionStart = () => {
+      console.log('CONNECTION START');
+      return from(this.hubConnection.start()).pipe(
       map(() => {
         this.addEventListener();
         return true;
@@ -35,32 +37,40 @@ export class RxEventListenerService {
       catchError(err => {
         console.log(err);
         return of(false);
-      }));
-
+      })
+      );
+    };
+    console.log('CONSTATE:' + (this.hubConnection.state === signalR.HubConnectionState.Disconnected));
     const connectionEstablished$ = of(this.hubConnection.state === signalR.HubConnectionState.Disconnected);
 
 
     const listenForGame = gameIdObs.pipe(concatMap(gId => {
+      console.log('LISTEN FOR GAME ' + gId);
       this.listenForGameEvents(gId);
       return of(true);
     }));
 
-    const v1 = connectionEstablished$.pipe(
-      filter(disconnected => disconnected),
-      concatMap(val => {
-        return connectionStart();
-      }),
-      filter(connected => connected),
-      concatMap(connected => listenForGame)
-    );
+     const v1 = connectionEstablished$.pipe(
+       filter(disconnected => disconnected),
+       concatMap(val => {
+         return connectionStart();
+       }),
+       filter(connected => connected),
+       concatMap(connected => listenForGame)
+     );
 
-    const v2 = connectionEstablished$.pipe(
-        filter(disconnected => !disconnected),
-        concatMap(val => {
-          return listenForGame;
-        })
-    );
+     const v2 = connectionEstablished$.pipe(
+         filter(disconnected => !disconnected),
+         concatMap(val => {
+           return listenForGame;
+         })
+     );
 
+    // const x = connectionEstablished$.pipe(
+    //   switchMap(e => iif(() => e, connectionStart().pipe(
+    //     filter(con => con),
+    //     concatMap(() => listenForGame)), listenForGame)));
+    // return x;
     return merge(v1, v2);
   }
 
