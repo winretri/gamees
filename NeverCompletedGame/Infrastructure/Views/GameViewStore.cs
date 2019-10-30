@@ -27,6 +27,9 @@ namespace Infrastructure.Views
             {
                 case Opened opened: Handle(opened);
                     break;
+                case GuessMade guessMade:
+                    Handle(guessMade);
+                    break;
                 case LevelSucceeded succeeded:
                     Handle(succeeded);
                     break;
@@ -57,14 +60,19 @@ namespace Infrastructure.Views
             grm.Level = e.NewLevel;
             grm.Score = e.NewScore;
             grm.Question = _riddleRepository.GetRiddle(e.NewLevel).Question;
+
+            GuessReadModel sourceGuess = this._context.Guesses.FirstOrDefault(g => g.Id == e.GuessId && g.GuessStatus == "unknown");
+            sourceGuess.GuessStatus = "correct";
+
             this._context.SaveChanges();
         }
 
-        //private void Handle(MakeGuess e)
-        //{
-
-        //    GuessReadModel guessRM = new GuessReadModel() {GameId = e.Id};
-        //}
+        private void Handle(GuessMade e)
+        {
+            GuessReadModel guessRM = new GuessReadModel() {GameId = e.Id, GuessStatus = "unknown", Guess = e.Guess, Id = Guid.NewGuid().ToString(), Level = e.Level};
+            this._context.Guesses.Add(guessRM);
+            this._context.SaveChanges();
+        }
 
         private void Handle(GameCompleted e)
         {
@@ -77,6 +85,10 @@ namespace Infrastructure.Views
         {
             GameReadModel grm = this._context.Games.FirstOrDefault(game => game.Id == e.Id);
             grm.Score = e.NewScore;
+
+            GuessReadModel sourceGuess = this._context.Guesses.FirstOrDefault(g => g.Id == e.GuessId && g.GuessStatus == "unknown");
+            sourceGuess.GuessStatus = "wrong";
+
             this._context.SaveChanges();
         }
 
@@ -90,6 +102,13 @@ namespace Infrastructure.Views
             }
 
             return null;
+        }
+
+        public IList<GuessView> GetGuesses(string id, int level)
+        {
+            List<GuessView> guessForGameAtLevel = _context.Guesses.Where(guess => guess.GameId == id && guess.Level == level).Select(grm => new GuessView() {Guess = grm.Guess,GuessStatus = grm.GuessStatus}).ToList();
+
+            return guessForGameAtLevel;
         }
 
         public void Dispose()

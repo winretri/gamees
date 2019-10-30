@@ -5,10 +5,12 @@
         #region Constructors and Destructors
 
         public GuessMade(string id,
-            string guess)
+            string guess,
+            int level)
         {
             Guess = guess;
             Id = id;
+            Level = level;
         }
 
         #endregion
@@ -18,6 +20,8 @@
         public string Guess { get; }
 
         public string Id { get; }
+
+        public int Level { get; set; }
 
         #endregion
 

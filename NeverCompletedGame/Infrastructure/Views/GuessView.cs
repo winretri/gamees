@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Infrastructure.Views
 {
-    public class GuessReadModel
+    public class GuessView
     {
         public string Id { get; internal set; }
 
@@ -12,9 +12,6 @@ namespace Infrastructure.Views
 
         public string Guess { get; internal set; }
 
-        public int Level { get; internal set; }
-        
         public string GuessStatus { get; internal set; }
-
     }
 }

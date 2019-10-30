@@ -31,5 +31,17 @@ namespace NeverCompletedGame.Controller
             return game;
         }
 
+        [HttpGet("games/{id}/guesses/{level}")]
+        public ActionResult<IList<GuessView>> GetGuesses(string id, int level)
+        {
+            IList<GuessView> guesses = _viewStore.GetGuesses(id, level);
+            if (guesses == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(guesses);
+        }
+
     }
 }
