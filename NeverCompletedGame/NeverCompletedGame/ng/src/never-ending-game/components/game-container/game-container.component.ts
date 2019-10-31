@@ -1,7 +1,9 @@
+import { LoadGuesses } from './../../state/guess/actions';
+import { guessSelectors } from './../../state/guess/selectors';
 import { GameEvent } from './../../model/game.event.interface';
 import { RxEventListenerService } from './../../service/rx.event-listener.service';
 import { MakeGuess, LoadGame } from './../../state/game/actions';
-import { IGame } from './../../model/game.interface';
+import { IGame, IGuess, GameId } from './../../model/game.interface';
 import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 
@@ -23,6 +25,10 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<null>();
 
   public game: IGame;
+
+  public gameId: GameId;
+
+  public guesses: IGuess[];
 
   public gameLoaded = false;
 
@@ -47,8 +53,24 @@ export class GameContainerComponent implements OnInit, OnDestroy {
         this.reset();
         this.game = game;
         this.completed = game != null ? this.game.completed : false;
+        if (this.game) {
+          const actionPayload = { gameId : this.game.id, level : this.game.level };
+          this.store.dispatch(new LoadGuesses(actionPayload));
+        }
       }
      );
+
+     this.store.select(gameSelectors.getGameId)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(gameId => {
+        this.reset();
+        this.gameId = gameId;
+      }
+     );
+
+     this.store.select(guessSelectors.getGuessEntities)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(guesses => this.guesses = guesses);
 
 
 
@@ -125,7 +147,11 @@ export class GameContainerComponent implements OnInit, OnDestroy {
 
   public onReset(): void {
     this.reset();
-    this.store.dispatch(new gameAction.ResetGame(this.game.id));
+    let gameId = null;
+    if (this.game) {
+      gameId = this.game.id;
+    }
+    this.store.dispatch(new gameAction.ResetGame(gameId));
   }
 
   public onDoReset(event: MouseEvent) {

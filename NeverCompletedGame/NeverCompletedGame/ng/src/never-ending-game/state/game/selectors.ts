@@ -42,7 +42,6 @@ const getGameCompleted = createSelector(
   (gameEvent, game) => gameEvent != null  && gameEvent.DomainEventName === 'GameCompleted' || game != null && game.completed
 );
 
-
 export const gameSelectors = {
   getGameId,
   getGame,

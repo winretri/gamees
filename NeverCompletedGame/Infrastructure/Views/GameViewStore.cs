@@ -69,7 +69,7 @@ namespace Infrastructure.Views
 
         private void Handle(GuessMade e)
         {
-            GuessReadModel guessRM = new GuessReadModel() {GameId = e.Id, GuessStatus = "unknown", Guess = e.Guess, Id = Guid.NewGuid().ToString(), Level = e.Level};
+            GuessReadModel guessRM = new GuessReadModel() { GameId = e.GameId, GuessStatus = "unknown", Guess = e.Guess, Id = e.GuessId, Level = e.Level};
             this._context.Guesses.Add(guessRM);
             this._context.SaveChanges();
         }

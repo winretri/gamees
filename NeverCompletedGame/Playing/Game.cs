@@ -97,14 +97,14 @@ namespace Playing
 
         public void MakeGuess(string guess)
         {
-            GuessMade e = new GuessMade(this.Id, guess, this.Level);
+            GuessMade e = new GuessMade(Guid.NewGuid().ToString(), this.Id, guess, this.Level);
             e.Handle(this);
             PublishEvent(e);
             if (CurrentRiddle.Solution.Trim().Equals(guess))
             {
                 bool completed = this.Level == MaxLevel;
                 int nextLevel = completed ? this.Level : this.Level + 1;
-                IEvent levelSucceeded = new LevelSucceeded(this.Id, this.Level, nextLevel, this.Score + 1 * Level, e.Id);
+                IEvent levelSucceeded = new LevelSucceeded(this.Id, this.Level, nextLevel, this.Score + 1 * Level, e.GuessId);
                 levelSucceeded.Handle(this);
                 PublishEvent(levelSucceeded);
                 if (completed)
@@ -117,7 +117,7 @@ namespace Playing
             else
             {
                 int newScore = (this.Score - 1) < 0 ? 0 : this.Score - 1;
-                IEvent levelFailed = new LevelFailed(this.Id, newScore, e.Id);
+                IEvent levelFailed = new LevelFailed(this.Id, newScore, e.GuessId);
                 levelFailed.Handle(this);
                 PublishEvent(levelFailed);
             }

@@ -76,7 +76,9 @@ export class GameEffects {
     concatMap((action: gameAction.ResetGame) => {
       console.log('RESET GAME');
       this.localStorage.resetOpenGame();
-      this.eventListener.stopListeningForGameEvents(action.payload);
+      if (action.payload) {
+         this.eventListener.stopListeningForGameEvents(action.payload);
+      }
       return of(new gameAction.InitGame());
     })
   );

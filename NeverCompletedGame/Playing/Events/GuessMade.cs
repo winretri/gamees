@@ -4,22 +4,25 @@
     {
         #region Constructors and Destructors
 
-        public GuessMade(string id,
+        public GuessMade(string guessId, string gameId,
             string guess,
             int level)
         {
             Guess = guess;
-            Id = id;
+            GameId = gameId;
             Level = level;
+            GuessId = guessId;
         }
 
         #endregion
 
         #region Public Properties
 
-        public string Guess { get; }
+        public string Guess { get; set; }
 
-        public string Id { get; }
+        public string GuessId { get; set; } 
+
+        public string GameId { get; }
 
         public int Level { get; set; }
 
