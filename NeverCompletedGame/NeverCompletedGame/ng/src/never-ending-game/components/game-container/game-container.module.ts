@@ -1,3 +1,4 @@
+import { GuessModule } from './../guess/guess.module';
 import { RxGuessService } from './../../service/rx.guess.service';
 import { GameButtonModule } from './../game-button/game-button.module';
 import { FormsModule } from '@angular/forms';
@@ -12,7 +13,8 @@ import { CommonModule } from '@angular/common';
   imports: [
     CommonModule,
     FormsModule,
-    GameButtonModule
+    GameButtonModule,
+    GuessModule,
   ],
   providers: [
     RxNeverCompletedGameService,
