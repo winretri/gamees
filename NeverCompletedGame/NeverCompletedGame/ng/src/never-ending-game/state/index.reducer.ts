@@ -1,7 +1,9 @@
+import { GameAction } from './game/actions';
+import { GameState } from './game/state';
 import { GuessAction } from './guess/actions';
 import { GuessState } from './guess/state';
-import { GameAction, gameReducer, GameState } from './game';
 import { guessReducer } from './guess/reducers';
+import { gameReducer } from './game/reducers';
 
 export interface NgcGameState {
   game: GameState;

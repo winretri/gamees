@@ -1,3 +1,4 @@
+import { RxGuessService } from './../../service/rx.guess.service';
 import { GameButtonModule } from './../game-button/game-button.module';
 import { FormsModule } from '@angular/forms';
 import { GameContainerComponent } from './game-container.component';
@@ -16,6 +17,7 @@ import { CommonModule } from '@angular/common';
   providers: [
     RxNeverCompletedGameService,
     LocalStorageService,
+    RxGuessService,
   ],
   exports: [GameContainerComponent]
 })

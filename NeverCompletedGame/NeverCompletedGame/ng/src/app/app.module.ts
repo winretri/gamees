@@ -1,3 +1,4 @@
+import { gameEffects } from './../never-ending-game/state/index.effects';
 import { environment } from './../environments/environment';
 import { GameReducers } from './../never-ending-game/state/index.reducer';
 import { AppRoutingModule } from './app-routing.module';
@@ -12,12 +13,11 @@ import { NCG_BASE_URL } from 'src/never-ending-game/util/token';
 import { RxNeverCompletedGameService } from 'src/never-ending-game/service/rx.never-completed-game.service';
 import { GamePageModule } from './game/pages/game-page/game.page.module';
 import { StoreModule } from '@ngrx/store';
-import { GameEffects } from 'src/never-ending-game/state';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 const effects = [
-  GameEffects,
+  ...gameEffects,
 ];
 
 @NgModule({

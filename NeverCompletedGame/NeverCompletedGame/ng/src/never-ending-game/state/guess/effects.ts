@@ -28,7 +28,7 @@ loadGuesses$: Observable<Action> = this.actions$.pipe(
   concatMap((action: guessAction.LoadGuesses) => {
     console.log('LOAD EFFING GUESSES');
     return this.guessService.fetchGuesses(action.payload.gameId, action.payload.level).pipe(
-      map((paths: IGuess[]) => new guessAction.LoadPathsSuccess(paths)),
+      map((guesses: IGuess[]) => new guessAction.LoadPathsSuccess(guesses)),
       catchError(err => {
         return of(new guessAction.LoadPathsFail(err));
       })

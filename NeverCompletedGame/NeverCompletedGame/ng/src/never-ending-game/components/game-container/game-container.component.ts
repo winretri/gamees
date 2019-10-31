@@ -1,16 +1,16 @@
-import { LoadGuesses } from './../../state/guess/actions';
+
 import { guessSelectors } from './../../state/guess/selectors';
 import { GameEvent } from './../../model/game.event.interface';
 import { RxEventListenerService } from './../../service/rx.event-listener.service';
-import { MakeGuess, LoadGame } from './../../state/game/actions';
+import * as gameAction from './../../state/game/actions';
+import * as guessAction from './../../state/guess/actions';
 import { IGame, IGuess, GameId } from './../../model/game.interface';
 import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
-import { Store, select } from '@ngrx/store';
+import { Store, } from '@ngrx/store';
 
 
 import { Subject } from 'rxjs';
 
-import * as gameAction from '../../state/';
 import { gameSelectors } from 'src/never-ending-game/state/game/selectors';
 import { takeUntil, throttleTime, delay, map , filter, } from 'rxjs/operators';
 
@@ -55,7 +55,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
         this.completed = game != null ? this.game.completed : false;
         if (this.game) {
           const actionPayload = { gameId : this.game.id, level : this.game.level };
-          this.store.dispatch(new LoadGuesses(actionPayload));
+          this.store.dispatch(new guessAction.LoadGuesses(actionPayload));
         }
       }
      );
@@ -109,7 +109,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy$),
       delay(500)
      ).subscribe(event => {
-       this.store.dispatch(new LoadGame(this.game.id));
+       this.store.dispatch(new gameAction.LoadGame(this.game.id));
       }
      );
 
@@ -134,7 +134,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
 
   makeGuess() {
     this.answerClass = '';
-    this.store.dispatch(new MakeGuess({
+    this.store.dispatch(new gameAction.MakeGuess({
       gameId: this.game.id,
       solution: this.solution,
     }));
