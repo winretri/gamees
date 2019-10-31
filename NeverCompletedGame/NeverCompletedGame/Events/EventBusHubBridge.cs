@@ -22,11 +22,8 @@ namespace NeverCompletedGame.Events
 
         public void Handle(IEventSourcingEvent e)
         {
-            if (e.DomainEvent is LevelSucceeded || e.DomainEvent is LevelFailed || e.DomainEvent is GameCompleted)
-            {
-                string aggregateId = e.AggregateId;
-                Handle(aggregateId, e);
-            }
+            string aggregateId = e.AggregateId;
+            Handle(aggregateId, e);
         }
 
         private void Handle(string aggregateId, IEventSourcingEvent @event)

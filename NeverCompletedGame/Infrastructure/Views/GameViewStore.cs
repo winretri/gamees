@@ -106,7 +106,7 @@ namespace Infrastructure.Views
 
         public IList<GuessView> GetGuesses(string id, int level)
         {
-            List<GuessView> guessForGameAtLevel = _context.Guesses.Where(guess => guess.GameId == id && guess.Level == level).Select(grm => new GuessView() {Guess = grm.Guess,GuessStatus = grm.GuessStatus}).ToList();
+            List<GuessView> guessForGameAtLevel = _context.Guesses.Where(guess => guess.GameId == id && guess.Level == level).Select(grm => new GuessView() {Guess = grm.Guess,GuessStatus = grm.GuessStatus, Id = grm.Id}).ToList();
 
             return guessForGameAtLevel;
         }

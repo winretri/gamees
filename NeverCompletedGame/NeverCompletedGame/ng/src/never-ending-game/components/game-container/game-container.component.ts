@@ -82,9 +82,15 @@ export class GameContainerComponent implements OnInit, OnDestroy {
      );
 
      this.store.select(gameSelectors.getLastGameEvent)
-    .pipe(takeUntil(this.destroy$), delay(1000))
+    .pipe(takeUntil(this.destroy$))
     .subscribe(event => {
-        console.log('LAST STORE EVENT: ' + event);
+      console.log('LAST STORE EVENT: ' + event);
+      if (event) {
+          if (event.DomainEventName === 'GuessMade') {
+            const actionPayload = { gameId : this.game.id, level : this.game.level };
+            this.store.dispatch(new guessAction.LoadGuesses(actionPayload));
+          }
+        }
       }
      );
 
