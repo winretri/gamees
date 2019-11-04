@@ -6,13 +6,15 @@ import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 
-import { Observable, of } from 'rxjs';
+import { Observable, of, merge } from 'rxjs';
 import { catchError, concatMap, map, tap } from 'rxjs/operators';
 
 import * as gameAction from './actions';
 
 import { RxNeverCompletedGameService } from '../../service';
 import { IGame } from '../../model';
+
+import { SIGNALR_HUB_UNSTARTED, mergeMapHubToAction, startSignalRHub } from 'ngrx-signalr';
 
 @Injectable()
 export class GameEffects {
@@ -141,6 +143,25 @@ export class GameEffects {
     }
     )
   );
+
+  @Effect()
+  signalHubUnstarted$: Observable<Action> = this.actions$.pipe(
+    ofType(SIGNALR_HUB_UNSTARTED),
+    tap(_ => console.log('UNSTARTED')),
+    mergeMapHubToAction(({ hub }) => {
+      const whenEvent$ = hub.on<any>('ReceiveEvent').pipe(
+          map(x => {
+            const data = JSON.parse(x);
+            console.log('EFFECT LISTENER' + data);
+            return new gameAction.EventReceived(data);
+          })
+      );
+      return merge(
+          whenEvent$,
+          of(startSignalRHub(hub))
+      );
+  })
+);
 
 
 
