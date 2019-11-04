@@ -1,5 +1,6 @@
-<div class="game-container">
+
   <ng-container *ngIf="game && !completed">
+      <div class="game-container">
     <h2 id="level">{{game.level}}</h2>
     <div class="question">
       <p>{{game.question}}</p>
@@ -10,14 +11,17 @@
       </span>
       <input [(ngModel)]="solution" [ngClass]="answerClass" (keyup)="onKeyUp($event)" (keyup.enter)="onKeyUpEnter($event)" type="text" name="name" class="answer" autofocus="autofocus" autocomplete="off">
     </div>
+  </div>
+    <div class="game-menu">
+      <ncg-guess-container [guesses]="guesses" [level]="game?.level"></ncg-guess-container>
+    </div>
   </ng-container>
   <ng-container *ngIf="completed">
+    <div class="winner-container">
       <div class="winner">
-      <div>YOU'RE A WINNER BABY</div>
-      <ncg-game-button (gameClick)="onDoReset($event)">RESTART</ncg-game-button>
+        <div>YOU'RE A WINNER BABY</div>
+        <ncg-game-button (gameClick)="onDoReset($event)">RESTART</ncg-game-button>
       </div>
+    </div>
   </ng-container>
-</div>
-<div class="game-menu">
-    <ncg-guess-container [guesses]="guesses" [level]="game?.level"></ncg-guess-container>
-</div>
+
