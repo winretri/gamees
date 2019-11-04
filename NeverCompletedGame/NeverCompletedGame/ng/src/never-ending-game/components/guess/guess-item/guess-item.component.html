@@ -1,1 +1,5 @@
-<p>guess-item works!</p>
+<div #guessRef [class]="'guess-placeholder ' + guess?.guessStatus">
+  <div class="inner no-select">{{guess?.guess}}
+  </div>
+</div>
+

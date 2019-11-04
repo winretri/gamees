@@ -16,5 +16,7 @@ namespace Infrastructure.Views
         
         public string GuessStatus { get; internal set; }
 
+        public DateTime GuessTime { get; internal set; }
+
     }
 }

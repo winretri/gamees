@@ -7,6 +7,8 @@ export interface IGuess {
 
   readonly guessStatus: string;
 
+  readonly guessTime: Date;
+
 }
 
 export interface IGame {

@@ -1,0 +1,22 @@
+@import "./variables";
+
+
+@mixin guess-placeholder-template {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  height: 45px;
+  position: relative;
+}
+
+@mixin guess {
+  background-color: white;
+  padding: 10px 10px 10px 20px;
+  border-radius: 3px;
+  border: 1px solid transparent;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  .inner {
+    color: #617389;
+    overflow: hidden;
+    height: 100%;
+  }
+}

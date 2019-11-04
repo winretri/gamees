@@ -69,7 +69,7 @@ namespace Infrastructure.Views
 
         private void Handle(GuessMade e)
         {
-            GuessReadModel guessRM = new GuessReadModel() { GameId = e.GameId, GuessStatus = "unknown", Guess = e.Guess, Id = e.GuessId, Level = e.Level};
+            GuessReadModel guessRM = new GuessReadModel() { GameId = e.GameId, GuessStatus = "unknown", Guess = e.Guess, Id = e.GuessId, Level = e.Level, GuessTime = DateTime.UtcNow};
             this._context.Guesses.Add(guessRM);
             this._context.SaveChanges();
         }
@@ -106,7 +106,7 @@ namespace Infrastructure.Views
 
         public IList<GuessView> GetGuesses(string id, int level)
         {
-            List<GuessView> guessForGameAtLevel = _context.Guesses.Where(guess => guess.GameId == id && guess.Level == level).Select(grm => new GuessView() {Guess = grm.Guess,GuessStatus = grm.GuessStatus, Id = grm.Id}).ToList();
+            List<GuessView> guessForGameAtLevel = _context.Guesses.Where(guess => guess.GameId == id && guess.Level == level).Select(grm => new GuessView() {Guess = grm.Guess,GuessStatus = grm.GuessStatus, Id = grm.Id, GuessTime = grm.GuessTime}).ToList();
 
             return guessForGameAtLevel;
         }
