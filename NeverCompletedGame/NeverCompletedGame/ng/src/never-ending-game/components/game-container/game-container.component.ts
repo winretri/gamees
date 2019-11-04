@@ -54,6 +54,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
         this.game = game;
         this.completed = game != null ? this.game.completed : false;
         if (this.game) {
+          console.log('reloading guesses');
           const actionPayload = { gameId : this.game.id, level : this.game.level };
           this.store.dispatch(new guessAction.LoadGuesses(actionPayload));
         }
@@ -99,6 +100,8 @@ export class GameContainerComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy$)
      ).subscribe(event => {
        this.answerClass = 'wrong';
+       const actionPayload = { gameId : this.game.id, level : this.game.level };
+       this.store.dispatch(new guessAction.LoadGuesses(actionPayload));
       }
      );
 
@@ -107,6 +110,8 @@ export class GameContainerComponent implements OnInit, OnDestroy {
        takeUntil(this.destroy$),
       ).subscribe(event => {
         this.answerClass = 'correct';
+        const actionPayload = { gameId : this.game.id, level : this.game.level };
+        this.store.dispatch(new guessAction.LoadGuesses(actionPayload));
        }
       );
 
@@ -115,7 +120,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy$),
       delay(500)
      ).subscribe(event => {
-       this.store.dispatch(new gameAction.LoadGame(this.game.id));
+       this.store.dispatch(new gameAction.ReloadGame(this.game.id));
       }
      );
 

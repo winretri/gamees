@@ -8,7 +8,6 @@ import { Injectable, Inject } from '@angular/core';
 import * as signalR from '@aspnet/signalr';
 import { NCG_BASE_URL } from '../util/token';
 import { Url } from '../util/url';
-import { createSignalRHub } from 'ngrx-signalr';
 
 @Injectable()
 export class RxEventListenerService {
@@ -28,9 +27,8 @@ export class RxEventListenerService {
       const hubDefinition = {
         hubName: 'EventHub',
         url: this.url.serialize(),
-    };
+  };
 
-    store.dispatch(createSignalRHub(hubDefinition));
    }
 
   public startConnection(gameId: GameId): Observable<boolean> {

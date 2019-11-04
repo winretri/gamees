@@ -11,6 +11,9 @@ export enum GameActionTypes {
   LOAD_GAME = '[GAME] Load Game',
   LOAD_GAME_SUCCESS = '[GAME] Load Game Success',
   LOAD_GAME_FAIL = '[GAME] Load Game Fail',
+  RELOAD_GAME = '[GAME] Reload Game',
+  RELOAD_GAME_SUCCESS = '[GAME] Reload Game Success',
+  RELOAD_GAME_FAIL = '[GAME] Reload Game Fail',
   MAKE_GUESS = '[GAME] Make Guess',
   MAKE_GUESS_SUCCESS = '[GAME] Make Guess Success',
   MAKE_GUESS_FAIL = '[GAME] Make Guess Fail',
@@ -68,6 +71,27 @@ export class LoadGameFail implements Action {
   }
 }
 
+export class ReloadGame implements Action {
+  readonly type = GameActionTypes.RELOAD_GAME;
+
+  constructor(public payload: GameId) {
+  }
+}
+
+export class ReloadGameSuccess implements Action {
+  readonly type = GameActionTypes.RELOAD_GAME_SUCCESS;
+
+  constructor(public payload: IGame) {
+  }
+}
+
+export class ReloadGameFail implements Action {
+  readonly type = GameActionTypes.RELOAD_GAME_FAIL;
+
+  constructor(public payload: HttpErrorResponse) {
+  }
+}
+
 export class MakeGuess implements Action {
   readonly type = GameActionTypes.MAKE_GUESS;
 
@@ -103,6 +127,15 @@ export class ResetGame implements Action {
   }
 }
 
-export type GameLoadAction = InitGame | OpenGame | OpenGameSuccess | LoadGame | LoadGameSuccess | LoadGameFail;
+export type GameLoadAction =
+  InitGame |
+  OpenGame |
+  OpenGameSuccess |
+  LoadGame |
+  LoadGameSuccess |
+  LoadGameFail |
+  ReloadGame |
+  ReloadGameSuccess |
+  ReloadGameFail;
 export type GamePlayAction = ResetGame | MakeGuess | EventReceived;
 export type GameAction = GameLoadAction | GamePlayAction;

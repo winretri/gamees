@@ -38,6 +38,7 @@ function initGameReducer(state: GameState, action: gameAction.GameAction): GameS
         loading: true,
       };
     case gameAction.GameActionTypes.LOAD_GAME_SUCCESS:
+    case gameAction.GameActionTypes.RELOAD_GAME_SUCCESS:
       return gameAdapter.upsertOne(action.payload, {
         ...state,
         gameId: action.payload.id,

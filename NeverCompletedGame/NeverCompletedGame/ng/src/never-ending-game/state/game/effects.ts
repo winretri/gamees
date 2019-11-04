@@ -14,7 +14,6 @@ import * as gameAction from './actions';
 import { RxNeverCompletedGameService } from '../../service';
 import { IGame } from '../../model';
 
-import { SIGNALR_HUB_UNSTARTED, mergeMapHubToAction, startSignalRHub } from 'ngrx-signalr';
 
 @Injectable()
 export class GameEffects {
@@ -39,8 +38,8 @@ export class GameEffects {
         catchError(err => {
           return of(new gameAction.OpenGameFail(err));
         })
-      );}
-    )
+      );
+    })
   );
 
   @Effect()
@@ -108,6 +107,28 @@ export class GameEffects {
   );
 
   @Effect()
+  reloadGame$: Observable<Action> = this.actions$.pipe(
+    ofType<gameAction.ReloadGame>(
+      gameAction.GameActionTypes.RELOAD_GAME
+    ),
+    concatMap((action: gameAction.ReloadGame) => {
+      console.log('RELOAD GAME');
+      return this.gameService.fetchGame(action.payload).pipe(
+        map((game: IGame) => {
+          console.log('RETURN RELOAD GAME SUCCESS');
+          return new gameAction.ReloadGameSuccess(game);
+        }
+          ),
+        catchError(err => {
+          console.log('LOAD REGAME FAIL');
+          return of(new gameAction.ReloadGameFail(err));
+        })
+      );
+      }
+    )
+  );
+
+  @Effect()
   makeGuess$: Observable<Action> = this.actions$.pipe(
     ofType<gameAction.MakeGuess>(
       gameAction.GameActionTypes.MAKE_GUESS
@@ -143,25 +164,6 @@ export class GameEffects {
     }
     )
   );
-
-  @Effect()
-  signalHubUnstarted$: Observable<Action> = this.actions$.pipe(
-    ofType(SIGNALR_HUB_UNSTARTED),
-    tap(_ => console.log('UNSTARTED')),
-    mergeMapHubToAction(({ hub }) => {
-      const whenEvent$ = hub.on<any>('ReceiveEvent').pipe(
-          map(x => {
-            const data = JSON.parse(x);
-            console.log('EFFECT LISTENER' + data);
-            return new gameAction.EventReceived(data);
-          })
-      );
-      return merge(
-          whenEvent$,
-          of(startSignalRHub(hub))
-      );
-  })
-);
 
 
 
