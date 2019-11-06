@@ -6,6 +6,7 @@ export enum StartPageActionTypes {
   OPEN_GAME = '[STARTPAGE] Open Game',
   OPEN_GAME_SUCCESS = '[STARTPAGE] Open Game Success',
   OPEN_GAME_FAIL = '[STARTPAGE] Open Game Fail',
+  RESET_GAME = '[STARTPAGE] Reset Game',
 }
 // ---- READ ----
 export class InitGame implements Action {
@@ -31,6 +32,13 @@ export class OpenGameSuccess implements Action {
 
 export class OpenGameFail implements Action {
   readonly type = StartPageActionTypes.OPEN_GAME_FAIL;
+
+  constructor(public payload: GameId) {
+  }
+}
+
+export class ResetGame implements Action {
+  readonly type = StartPageActionTypes.RESET_GAME;
 
   constructor(public payload: GameId) {
   }

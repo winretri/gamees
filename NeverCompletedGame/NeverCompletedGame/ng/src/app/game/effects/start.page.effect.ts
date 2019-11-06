@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { GameId } from './../../../never-ending-game/model/game.interface';
 import { concatMap, catchError, map, tap } from 'rxjs/operators';
 import { Action } from '@ngrx/store';
@@ -14,7 +15,8 @@ export class StartPageEffects {
   constructor(
     private actions$: Actions,
     private gameService: RxNeverCompletedGameService,
-    private localStorage: LocalStorageService
+    private localStorage: LocalStorageService,
+    private readonly router: Router
   ) {
   }
 
@@ -45,6 +47,7 @@ export class StartPageEffects {
     tap((action: startPageAction.OpenGameSuccess) => {
        console.log('OPEN GAME SUCCESS');
        this.localStorage.storeOpenGameId(action.payload);
+       this.router.navigate(['ncg', action.payload]);
     })
   );
 
@@ -60,6 +63,18 @@ export class StartPageEffects {
      if (this.localStorage.containsOpenGameId) {
        return of(new startPageAction.OpenGameSuccess(this.localStorage.getOpenGameId()));
      }
+    })
+  );
+
+  @Effect()
+  resetGame$: Observable<Action> = this.actions$.pipe(
+    ofType<startPageAction.ResetGame>(
+      startPageAction.StartPageActionTypes.RESET_GAME
+    ),
+    concatMap((action: startPageAction.ResetGame) => {
+      console.log('RESET GAME');
+      this.localStorage.resetOpenGame();
+      return of(new startPageAction.OpenGame());
     })
   );
 }
