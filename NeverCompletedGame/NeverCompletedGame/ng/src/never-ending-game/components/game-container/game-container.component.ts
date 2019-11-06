@@ -5,7 +5,7 @@ import { RxEventListenerService } from './../../service/rx.event-listener.servic
 import * as gameAction from './../../state/game/actions';
 import * as guessAction from './../../state/guess/actions';
 import { IGame, IGuess, GameId } from './../../model/game.interface';
-import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, Input } from '@angular/core';
 import { Store, } from '@ngrx/store';
 
 
@@ -26,6 +26,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
 
   public game: IGame;
 
+  @Input()
   public gameId: GameId;
 
   public guesses: IGuess[];
@@ -45,7 +46,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   constructor(private store: Store<any>, private eventListener: RxEventListenerService) { }
 
   ngOnInit() {
-    this.store.dispatch(new gameAction.InitGame());
+    this.store.dispatch(new gameAction.LoadGame(this.gameId));
 
     this.store.select(gameSelectors.getGame)
     .pipe(takeUntil(this.destroy$))

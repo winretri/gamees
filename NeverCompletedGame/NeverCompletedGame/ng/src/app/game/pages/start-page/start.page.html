@@ -1,0 +1,10 @@
+<div class="ncg-start-container">
+  <header>
+    <h1>Never Completed Game</h1>
+  </header>
+  <main>
+    <ncg-game-button *ngIf="gameId" (gameClick)="onDoContinue($event)">CONTINUE</ncg-game-button>
+    <br/>
+    <ncg-game-button (gameClick)="onDoReset($event)">START NEW</ncg-game-button>
+  </main>
+</div>
