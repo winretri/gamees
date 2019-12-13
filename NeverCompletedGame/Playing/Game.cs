@@ -56,7 +56,7 @@ namespace Playing
         #endregion
 
         #region Public Methods and Operators
-
+        #region helpers
         public static Riddle GetRiddle(int level)
         {
             var ass = typeof(Riddle).GetTypeInfo().Assembly;
@@ -94,7 +94,7 @@ namespace Playing
                 }
             }
         }
-
+        #endregion
         public void MakeGuess(string guess)
         {
             GuessMade e = new GuessMade(Guid.NewGuid().ToString(), this.Id, guess, this.Level);

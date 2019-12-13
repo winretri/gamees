@@ -8,6 +8,6 @@ namespace Infrastructure
 {
     public interface ICommandHandler<in T> where T: ICommand
     {
-        void Handle(string aggregateId, T command);
+        void Handle(string aggregateId, ICommand command);
     }
 }
